@@ -1,8 +1,4 @@
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-
-import { isAdmin } from "@/modules/auth/domain/roles";
-import { auth } from "@/modules/auth/infrastructure/auth";
+import { requireAdmin } from "@/modules/auth/presentation/server/auth-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -13,23 +9,7 @@ interface AdminLayoutProps {
 export default async function AdminLayout({
   children,
 }: AdminLayoutProps) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    redirect("/sign-in");
-  }
-
-  const userRole = (
-    session.user as {
-      role?: unknown;
-    }
-  ).role;
-
-  if (!isAdmin(userRole)) {
-    redirect("/dashboard");
-  }
+  await requireAdmin();
 
   return children;
 }

@@ -7,10 +7,7 @@ import {
   Zap,
 } from "lucide-react";
 
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-
-import { auth } from "@/modules/auth/infrastructure/auth";
+import { requireUser } from "@/modules/auth/presentation/server/auth-guard";
 import { dependencies } from "@/server/dependencies";
 
 import {
@@ -100,14 +97,7 @@ function formatDayNumber(
 }
 
 export default async function ChallengePage() {
-  const session =
-    await auth.api.getSession({
-      headers: await headers(),
-    });
-
-  if (!session?.user) {
-    redirect("/sign-in");
-  }
+  const session = await requireUser();
 
   const [
     dashboard,

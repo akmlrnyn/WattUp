@@ -17,11 +17,27 @@ export const auth = betterAuth({
     minPasswordLength: 8,
   },
 
+  /*
+   * Session disimpan secara aman di encrypted
+   * cookie selama lima menit.
+   *
+   * Navigasi antarrute tidak selalu membutuhkan
+   * query session baru ke Supabase.
+   */
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60,
+      strategy: "jwe",
+    },
+  },
+
   plugins: [
     admin({
       defaultRole: "user",
       adminRoles: ["admin"],
     }),
+
     nextCookies(),
   ],
 
@@ -32,4 +48,5 @@ export const auth = betterAuth({
   },
 });
 
-export type AuthSession = typeof auth.$Infer.Session;
+export type AuthSession =
+  typeof auth.$Infer.Session;

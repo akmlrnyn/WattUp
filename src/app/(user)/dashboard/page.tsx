@@ -4,11 +4,9 @@ import {
   Trophy,
   Zap,
 } from "lucide-react";
-import { headers } from "next/headers";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-import { auth } from "@/modules/auth/infrastructure/auth";
+import { requireUser } from "@/modules/auth/presentation/server/auth-guard";
 import { getGridStatus } from "@/modules/charging/domain/grid-window";
 import { dependencies } from "@/server/dependencies";
 
@@ -37,13 +35,7 @@ function getGridStatusClass(
 }
 
 export default async function DashboardPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    redirect("/sign-in");
-  }
+  const session = await requireUser();
 
   const dashboard =
     await dependencies.dashboard.getUserDashboard.execute(

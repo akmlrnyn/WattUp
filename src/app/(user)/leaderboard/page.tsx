@@ -3,10 +3,8 @@ import {
   Trophy,
   Zap,
 } from "lucide-react";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
-import { auth } from "@/modules/auth/infrastructure/auth";
+import { requireUser } from "@/modules/auth/presentation/server/auth-guard";
 import { dependencies } from "@/server/dependencies";
 
 export const dynamic = "force-dynamic";
@@ -42,13 +40,7 @@ function getRankIcon(rank: number) {
 }
 
 export default async function LeaderboardPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    redirect("/sign-in");
-  }
+  const session = await requireUser();
 
   const dashboard =
     await dependencies.dashboard.getUserDashboard.execute(
