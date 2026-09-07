@@ -2,8 +2,10 @@ export interface AdminParticipant {
   userId: string;
   name: string;
   email: string;
+  vehicleName: string;
 
   sessionCount: number;
+  streakDays: number;
 
   totalEnergyKwh: number;
   shiftedEnergyKwh: number;
@@ -11,6 +13,11 @@ export interface AdminParticipant {
 
   offPeakRate: number;
   averageScore: number;
+}
+
+export interface AdminDailyOffPeakRate {
+  label: string;
+  rate: number;
 }
 
 export interface AdminDashboardData {
@@ -22,6 +29,13 @@ export interface AdminDashboardData {
   totalSavings: number;
 
   averageOffPeakRate: number;
+  cycleCompletionRate: number;
+  completedCycleUsers: number;
+
+  currentCycleNumber: number;
+  currentCycleDay: number;
+
+  dailyOffPeakRates: AdminDailyOffPeakRate[];
 
   participants: AdminParticipant[];
 }
