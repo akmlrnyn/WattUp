@@ -1,33 +1,77 @@
 "use client";
 
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  LoaderCircle,
+  LockKeyhole,
+  Mail,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import {
+  type FormEvent,
+  useState,
+} from "react";
 
 import { authClient } from "@/modules/auth/presentation/auth-client";
 
 export function SignInForm() {
   const router = useRouter();
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isPending, setIsPending] = useState(false);
+  const [
+    showPassword,
+    setShowPassword,
+  ] = useState(false);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const [
+    rememberMe,
+    setRememberMe,
+  ] = useState(true);
+
+  const [
+    errorMessage,
+    setErrorMessage,
+  ] = useState<string | null>(null);
+
+  const [
+    isPending,
+    setIsPending,
+  ] = useState(false);
+
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    const formData =
+      new FormData(
+        event.currentTarget,
+      );
 
     setErrorMessage(null);
     setIsPending(true);
 
-    const { error } = await authClient.signIn.email({
-      email: String(formData.get("email")),
-      password: String(formData.get("password")),
-      rememberMe: true,
-    });
+    const { error } =
+      await authClient.signIn.email({
+        email: String(
+          formData.get("email"),
+        ),
+
+        password: String(
+          formData.get("password"),
+        ),
+
+        rememberMe,
+      });
 
     if (error) {
-      setErrorMessage(error.message ?? "Login gagal");
+      setErrorMessage(
+        error.message ??
+          "Email atau password tidak sesuai.",
+      );
+
       setIsPending(false);
       return;
     }
@@ -37,56 +81,132 @@ export function SignInForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="email" className="mb-1 block text-sm font-medium">
-          Email
-        </label>
+    <form
+      className="auth-form"
+      onSubmit={handleSubmit}
+    >
+      <label className="auth-field">
+        <span>Email</span>
 
+        <div className="auth-input-shell">
+          <Mail
+            aria-hidden
+            size={18}
+          />
+
+          <input
+            autoComplete="email"
+            name="email"
+            placeholder="nama@email.com"
+            required
+            type="email"
+          />
+        </div>
+      </label>
+
+      <label className="auth-field">
+        <span>Password</span>
+
+        <div className="auth-input-shell">
+          <LockKeyhole
+            aria-hidden
+            size={18}
+          />
+
+          <input
+            autoComplete="current-password"
+            minLength={8}
+            name="password"
+            placeholder="Masukkan password"
+            required
+            type={
+              showPassword
+                ? "text"
+                : "password"
+            }
+          />
+
+          <button
+            aria-label={
+              showPassword
+                ? "Sembunyikan password"
+                : "Tampilkan password"
+            }
+            className="auth-password-toggle"
+            onClick={() =>
+              setShowPassword(
+                (value) => !value,
+              )
+            }
+            type="button"
+          >
+            {showPassword ? (
+              <EyeOff
+                aria-hidden
+                size={17}
+              />
+            ) : (
+              <Eye
+                aria-hidden
+                size={17}
+              />
+            )}
+          </button>
+        </div>
+      </label>
+
+      <label className="auth-remember-row">
         <input
-          id="email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          required
-          className="w-full rounded-xl border border-neutral-300 px-4 py-3 outline-none focus:border-emerald-500"
+          checked={rememberMe}
+          onChange={(event) =>
+            setRememberMe(
+              event.target.checked,
+            )
+          }
+          type="checkbox"
         />
-      </div>
 
-      <div>
-        <label htmlFor="password" className="mb-1 block text-sm font-medium">
-          Password
-        </label>
+        <span>
+          Ingat saya di perangkat ini
+        </span>
+      </label>
 
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          minLength={8}
-          required
-          className="w-full rounded-xl border border-neutral-300 px-4 py-3 outline-none focus:border-emerald-500"
-        />
-      </div>
-
-      {errorMessage && (
-        <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+      {errorMessage ? (
+        <p
+          className="auth-form-error"
+          role="alert"
+        >
           {errorMessage}
         </p>
-      )}
+      ) : null}
 
       <button
-        type="submit"
+        className="auth-submit-button"
         disabled={isPending}
-        className="w-full rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white disabled:opacity-50"
+        type="submit"
       >
-        {isPending ? "Memproses..." : "Masuk"}
+        {isPending ? (
+          <LoaderCircle
+            className="auth-spinner"
+            size={18}
+          />
+        ) : (
+          <ArrowRight
+            aria-hidden
+            size={18}
+          />
+        )}
+
+        {isPending
+          ? "Memproses..."
+          : "Masuk ke WattUp"}
       </button>
 
-      <p className="text-center text-sm text-neutral-600">
+      <p className="auth-switch-copy">
         Belum punya akun?{" "}
-        <Link href="/sign-up" className="font-semibold text-emerald-700">
-          Daftar
+
+        <Link href="/sign-up">
+          Daftar sekarang
         </Link>
       </p>
     </form>

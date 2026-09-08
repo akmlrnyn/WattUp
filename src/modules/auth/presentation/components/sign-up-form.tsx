@@ -1,133 +1,266 @@
 "use client";
 
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  LoaderCircle,
+  LockKeyhole,
+  Mail,
+  UserRound,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import {
+  type FormEvent,
+  useState,
+} from "react";
 
 import { authClient } from "@/modules/auth/presentation/auth-client";
 
 export function SignUpForm() {
   const router = useRouter();
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isPending, setIsPending] = useState(false);
+  const [
+    showPassword,
+    setShowPassword,
+  ] = useState(false);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const [
+    errorMessage,
+    setErrorMessage,
+  ] = useState<string | null>(null);
+
+  const [
+    isPending,
+    setIsPending,
+  ] = useState(false);
+
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-    const password = String(formData.get("password"));
-    const passwordConfirmation = String(
-      formData.get("passwordConfirmation"),
+    const formData =
+      new FormData(
+        event.currentTarget,
+      );
+
+    const password = String(
+      formData.get("password"),
     );
 
-    if (password !== passwordConfirmation) {
-      setErrorMessage("Konfirmasi password tidak sama");
+    const passwordConfirmation =
+      String(
+        formData.get(
+          "passwordConfirmation",
+        ),
+      );
+
+    if (
+      password !==
+      passwordConfirmation
+    ) {
+      setErrorMessage(
+        "Konfirmasi password tidak sama.",
+      );
+
       return;
     }
 
     setErrorMessage(null);
     setIsPending(true);
 
-    const { error } = await authClient.signUp.email({
-      name: String(formData.get("name")),
-      email: String(formData.get("email")),
-      password,
-    });
+    const { error } =
+      await authClient.signUp.email({
+        name: String(
+          formData.get("name"),
+        ),
+
+        email: String(
+          formData.get("email"),
+        ),
+
+        password,
+      });
 
     if (error) {
-      setErrorMessage(error.message ?? "Registrasi gagal");
+      setErrorMessage(
+        error.message ??
+          "Registrasi gagal.",
+      );
+
       setIsPending(false);
       return;
     }
 
-    router.replace("/dashboard");
+    router.replace("/onboarding");
     router.refresh();
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="name" className="mb-1 block text-sm font-medium">
-          Nama
+    <form
+      className="auth-form"
+      onSubmit={handleSubmit}
+    >
+      <label className="auth-field">
+        <span>Nama lengkap</span>
+
+        <div className="auth-input-shell">
+          <UserRound
+            aria-hidden
+            size={18}
+          />
+
+          <input
+            autoComplete="name"
+            maxLength={80}
+            name="name"
+            placeholder="Nama lengkap kamu"
+            required
+          />
+        </div>
+      </label>
+
+      <label className="auth-field">
+        <span>Email</span>
+
+        <div className="auth-input-shell">
+          <Mail
+            aria-hidden
+            size={18}
+          />
+
+          <input
+            autoComplete="email"
+            name="email"
+            placeholder="nama@email.com"
+            required
+            type="email"
+          />
+        </div>
+      </label>
+
+      <div className="auth-password-grid">
+        <label className="auth-field">
+          <span>Password</span>
+
+          <div className="auth-input-shell">
+            <LockKeyhole
+              aria-hidden
+              size={18}
+            />
+
+            <input
+              autoComplete="new-password"
+              minLength={8}
+              name="password"
+              placeholder="Minimal 8 karakter"
+              required
+              type={
+                showPassword
+                  ? "text"
+                  : "password"
+              }
+            />
+
+            <button
+              aria-label={
+                showPassword
+                  ? "Sembunyikan password"
+                  : "Tampilkan password"
+              }
+              className="auth-password-toggle"
+              onClick={() =>
+                setShowPassword(
+                  (value) => !value,
+                )
+              }
+              type="button"
+            >
+              {showPassword ? (
+                <EyeOff
+                  aria-hidden
+                  size={17}
+                />
+              ) : (
+                <Eye
+                  aria-hidden
+                  size={17}
+                />
+              )}
+            </button>
+          </div>
         </label>
 
-        <input
-          id="name"
-          name="name"
-          required
-          autoComplete="name"
-          className="w-full rounded-xl border border-neutral-300 px-4 py-3 outline-none focus:border-emerald-500"
-        />
-      </div>
+        <label className="auth-field">
+          <span>
+            Konfirmasi password
+          </span>
 
-      <div>
-        <label htmlFor="email" className="mb-1 block text-sm font-medium">
-          Email
+          <div className="auth-input-shell">
+            <LockKeyhole
+              aria-hidden
+              size={18}
+            />
+
+            <input
+              autoComplete="new-password"
+              minLength={8}
+              name="passwordConfirmation"
+              placeholder="Ulangi password"
+              required
+              type={
+                showPassword
+                  ? "text"
+                  : "password"
+              }
+            />
+          </div>
         </label>
-
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          autoComplete="email"
-          className="w-full rounded-xl border border-neutral-300 px-4 py-3 outline-none focus:border-emerald-500"
-        />
       </div>
 
-      <div>
-        <label htmlFor="password" className="mb-1 block text-sm font-medium">
-          Password
-        </label>
+      <p className="auth-form-hint">
+        Setelah akun dibuat, kamu akan
+        mengatur kendaraan EV dan profil
+        listrik.
+      </p>
 
-        <input
-          id="password"
-          name="password"
-          type="password"
-          minLength={8}
-          required
-          autoComplete="new-password"
-          className="w-full rounded-xl border border-neutral-300 px-4 py-3 outline-none focus:border-emerald-500"
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="passwordConfirmation"
-          className="mb-1 block text-sm font-medium"
+      {errorMessage ? (
+        <p
+          className="auth-form-error"
+          role="alert"
         >
-          Konfirmasi password
-        </label>
-
-        <input
-          id="passwordConfirmation"
-          name="passwordConfirmation"
-          type="password"
-          minLength={8}
-          required
-          autoComplete="new-password"
-          className="w-full rounded-xl border border-neutral-300 px-4 py-3 outline-none focus:border-emerald-500"
-        />
-      </div>
-
-      {errorMessage && (
-        <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
           {errorMessage}
         </p>
-      )}
+      ) : null}
 
       <button
-        type="submit"
+        className="auth-submit-button"
         disabled={isPending}
-        className="w-full rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white disabled:opacity-50"
+        type="submit"
       >
-        {isPending ? "Memproses..." : "Buat akun"}
+        {isPending ? (
+          <LoaderCircle
+            className="auth-spinner"
+            size={18}
+          />
+        ) : (
+          <ArrowRight
+            aria-hidden
+            size={18}
+          />
+        )}
+
+        {isPending
+          ? "Membuat akun..."
+          : "Lanjutkan ke setup EV"}
       </button>
 
-      <p className="text-center text-sm text-neutral-600">
+      <p className="auth-switch-copy">
         Sudah punya akun?{" "}
-        <Link href="/sign-in" className="font-semibold text-emerald-700">
+
+        <Link href="/sign-in">
           Masuk
         </Link>
       </p>
