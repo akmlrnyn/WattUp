@@ -37,13 +37,13 @@ export function getGridStatus(date = new Date()): GridStatus {
     return {
       window: "peak",
       title: "Jam beban puncak",
-      subtitle: `${(22 - hour).toFixed(1)} jam lagi menuju diskon pukul 22.00`,
+      subtitle: `${(22 - hour).toFixed(0)} jam lagi menuju diskon pukul 22.00`,
     };
   }
 
   return {
     window: "regular",
     title: "Menuju jam off-peak",
-    subtitle: `${((22 - hour + 24) % 24).toFixed(1)} jam lagi menuju pukul 22.00`,
+    subtitle: `${((22 - hour ) % 24).toFixed(0)} jam lagi menuju pukul 22.00`,
   };
 }

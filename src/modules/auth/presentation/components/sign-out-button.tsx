@@ -1,37 +1,90 @@
 "use client";
 
+import {
+  LoaderCircle,
+  LogOut,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { authClient } from "@/modules/auth/presentation/auth-client";
 
-export function SignOutButton() {
+interface SignOutButtonProps {
+  compact?: boolean;
+}
+
+export function SignOutButton({
+  compact = false,
+}: SignOutButtonProps) {
   const router = useRouter();
-  const [isPending, setIsPending] = useState(false);
+
+  const [isPending, setIsPending] =
+    useState(false);
 
   async function handleSignOut() {
+    if (isPending) {
+      return;
+    }
+
     setIsPending(true);
 
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess() {
-          router.replace("/sign-in");
-          router.refresh();
-        },
-      },
-    });
+    try {
+      const { error } =
+        await authClient.signOut();
 
-    setIsPending(false);
+      if (error) {
+        throw new Error(
+          error.message ??
+            "Logout gagal.",
+        );
+      }
+
+      router.replace("/sign-in");
+      router.refresh();
+    } catch (error) {
+      console.error(
+        "SIGN_OUT_ERROR",
+        error,
+      );
+
+      setIsPending(false);
+    }
   }
 
   return (
     <button
-      type="button"
-      onClick={handleSignOut}
+      aria-label={
+        isPending
+          ? "Sedang keluar"
+          : "Keluar dari WattUp"
+      }
+      className={
+        `sign-out-button ${
+          compact ? "compact" : ""
+        }`.trim()
+      }
       disabled={isPending}
-      className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium"
+      onClick={handleSignOut}
+      type="button"
     >
-      {isPending ? "Keluar..." : "Keluar"}
+      {isPending ? (
+        <LoaderCircle
+          aria-hidden
+          className="sign-out-spinner"
+          size={compact ? 18 : 19}
+        />
+      ) : (
+        <LogOut
+          aria-hidden
+          size={compact ? 18 : 19}
+        />
+      )}
+
+      <span>
+        {isPending
+          ? "Keluar..."
+          : "Keluar"}
+      </span>
     </button>
   );
 }

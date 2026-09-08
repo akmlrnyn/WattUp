@@ -5,6 +5,7 @@ import {
 import Link from "next/link";
 
 import { dependencies } from "@/server/dependencies";
+import { BrandWordmark } from "@/shared/presentation/components/brand-mark";
 
 export const dynamic = "force-dynamic";
 
@@ -76,9 +77,12 @@ export default async function AdminDashboardPage() {
             Kembali ke aplikasi
           </Link>
 
-          <h1>
-            WattUp Admin Dashboard
-          </h1>
+          <BrandWordmark
+  className="admin-header-logo"
+  priority
+/>
+
+<h1>WattUp Admin Dashboard</h1>
 
           <p>
             Monitoring pilot #ShiftMalam ·
@@ -162,7 +166,7 @@ export default async function AdminDashboardPage() {
           <strong>
             {formatNumber(
               dashboard.totalShiftedEnergyKwh,
-            )}
+            )} kWh
           </strong>
 
           <small>
