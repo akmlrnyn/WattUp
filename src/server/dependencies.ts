@@ -8,6 +8,13 @@ import { PrismaDashboardRepository } from "@/modules/dashboard/infrastructure/pr
 import { GetAdminDashboardUseCase } from "@/modules/admin/application/use-cases/get-admin-dashboard.use-case";
 import { PrismaAdminDashboardRepository } from "@/modules/admin/infrastructure/prisma-admin-dashboard.repository";
 
+import { GetUserChargingSetupUseCase } from "@/modules/onboarding/application/use-cases/get-user-charging-setup.use-case";
+import { SetupUserProfileUseCase } from "@/modules/onboarding/application/use-cases/setup-user-profile.use-case";
+import { PrismaUserSetupRepository } from "@/modules/onboarding/infrastructure/prisma-user-setup.repository";
+
+const userSetupRepository =
+  new PrismaUserSetupRepository();
+
 const chargingSessionRepository =
   new PrismaChargingSessionRepository();
 
@@ -18,6 +25,18 @@ const adminDashboardRepository =
   new PrismaAdminDashboardRepository();
 
 export const dependencies = {
+  onboarding: {
+    setupUserProfile:
+      new SetupUserProfileUseCase(
+        userSetupRepository,
+      ),
+
+    getUserChargingSetup:
+      new GetUserChargingSetupUseCase(
+        userSetupRepository,
+      ),
+  },
+
   charging: {
     createSession: new CreateChargingSessionUseCase(
       chargingSessionRepository,
