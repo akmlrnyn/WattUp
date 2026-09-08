@@ -57,7 +57,7 @@ export default async function DashboardPage() {
     {
       label: "kWh dialihkan",
       value:
-        dashboard.weekShiftedEnergyKwh.toFixed(1),
+        dashboard.weekShiftedEnergyKwh.toFixed(1) + " kWh",
       subtitle: "minggu ini",
     },
     {
