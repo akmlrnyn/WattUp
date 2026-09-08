@@ -1,9 +1,15 @@
+import { SignOutButton } from "@/modules/auth/presentation/components/sign-out-button";
+
 import {
   AdminNavigationLink,
   DesktopNavigation,
   MobileNavigation,
 } from "./app-navigation";
-import { BrandMark } from "./brand-mark";
+
+import {
+  BrandMark,
+  BrandWordmark,
+} from "./brand-mark";
 
 interface AppShellProps {
   userName: string;
@@ -11,8 +17,13 @@ interface AppShellProps {
   children: React.ReactNode;
 }
 
-function getFirstName(name: string): string {
-  return name.trim().split(/\s+/)[0] || "Pengguna";
+function getFirstName(
+  name: string,
+): string {
+  return (
+    name.trim().split(/\s+/)[0] ||
+    "Pengguna"
+  );
 }
 
 export function AppShell({
@@ -20,27 +31,31 @@ export function AppShell({
   isAdmin,
   children,
 }: AppShellProps) {
-  const firstName = getFirstName(userName);
+  const firstName =
+    getFirstName(userName);
 
   return (
     <div className="app-shell">
       <aside className="desktop-sidebar">
         <div className="sidebar-brand">
-          <BrandMark />
-
           <div>
-            <strong>WattUp</strong>
-            <span>#ShiftMalam Challenge</span>
+            <BrandWordmark priority />
+
+            <span className="sidebar-tagline">
+              #ShiftMalam Challenge
+            </span>
           </div>
         </div>
 
         <DesktopNavigation />
 
-        {isAdmin ? (
-          <div className="sidebar-footer">
+        <div className="sidebar-footer">
+          {isAdmin ? (
             <AdminNavigationLink />
-          </div>
-        ) : null}
+          ) : null}
+
+          <SignOutButton />
+        </div>
       </aside>
 
       <div className="app-main">
@@ -50,16 +65,27 @@ export function AppShell({
           </div>
 
           <div className="topbar-user">
-            <span>Selamat datang,</span>
-            <strong>{firstName}</strong>
+            <span>
+              Selamat datang,
+            </span>
+
+            <strong>
+              {firstName}
+            </strong>
           </div>
 
           <div className="topbar-avatar">
-            {firstName.charAt(0).toUpperCase()}
+            {firstName
+              .charAt(0)
+              .toUpperCase()}
           </div>
+
+          <SignOutButton compact />
         </header>
 
-        <main className="app-content">{children}</main>
+        <main className="app-content">
+          {children}
+        </main>
       </div>
 
       <MobileNavigation />
