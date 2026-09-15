@@ -341,6 +341,7 @@ export default async function AdminDashboardPage() {
                   <div
                     className="admin-chart-column"
                     key={day.label}
+                    title={`${day.label}, ${day.dateLabel}: ${formatNumber(day.shiftedEnergyKwh)} dari ${formatNumber(day.energyKwh)} kWh di off-peak (${formatNumber(day.rate)}%)`}
                   >
                     <div className="admin-chart-track">
                       {day.rate > 0 ? (
@@ -361,6 +362,7 @@ export default async function AdminDashboardPage() {
 
                     <strong>
                       {day.label}
+                      <small>{day.dateLabel}</small>
                     </strong>
                   </div>
                 );
@@ -371,7 +373,7 @@ export default async function AdminDashboardPage() {
           <p className="admin-chart-note">
             Persentase membandingkan energi
             pada window off-peak dengan total
-            energi charging per hari. Hari
+            energi charging per hari dalam WIB. Hari
             tanpa sesi ditampilkan sebagai 0%.
           </p>
         </section>

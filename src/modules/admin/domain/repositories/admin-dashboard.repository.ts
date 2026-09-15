@@ -17,7 +17,10 @@ export interface AdminParticipant {
 
 export interface AdminDailyOffPeakRate {
   label: string;
+  dateLabel: string;
   rate: number;
+  energyKwh: number;
+  shiftedEnergyKwh: number;
 }
 
 export interface AdminDashboardData {

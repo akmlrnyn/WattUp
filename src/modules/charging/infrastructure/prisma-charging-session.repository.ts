@@ -82,7 +82,17 @@ export class PrismaChargingSessionRepository
   ): Promise<ChargingSessionRecord> {
     const session = await prisma.chargingSession.create({
       data: {
-        userId: data.userId,
+        user: {
+          connect: {
+            id: data.userId,
+          },
+        },
+
+        vehicle: {
+          connect: {
+            userId: data.userId,
+          },
+        },
 
         inputMode: data.inputMode,
         source: "MANUAL",

@@ -1,0 +1,226 @@
+.backdrop {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+
+  display: grid;
+  place-items: center;
+
+  padding: 24px;
+
+  background: rgba(8, 27, 21, 0.58);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  animation: backdrop-enter 160ms ease-out;
+}
+
+.dialog {
+  width: min(100%, 410px);
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+
+  padding: 28px;
+
+  color: #153229;
+  background: #ffffff;
+
+  border: 1px solid
+    rgba(21, 50, 41, 0.12);
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 32px 90px
+    rgba(8, 27, 21, 0.28);
+
+  animation: dialog-enter 180ms ease-out;
+}
+
+.dialogIcon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+
+  color: #c8523a;
+  background: rgba(226, 102, 74, 0.12);
+
+  border-radius: 15px;
+}
+
+.title {
+  margin: 20px 0 0;
+
+  color: #153229;
+
+  font-size: 1.28rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+}
+
+.description {
+  max-width: 330px;
+  margin: 9px 0 0;
+
+  color: #5c6f68;
+
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.error {
+  margin: 17px 0 0;
+  padding: 11px 13px;
+
+  color: #a53c28;
+  background: rgba(226, 102, 74, 0.11);
+
+  border-radius: 11px;
+
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+
+  margin-top: 24px;
+}
+
+.actions button {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 11px 16px;
+
+  border-radius: 13px;
+
+  font-size: 0.74rem;
+  font-weight: 800;
+
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.actions button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.actions button:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.cancelButton {
+  color: #153229;
+  background: #ffffff;
+
+  border: 1px solid
+    rgba(21, 50, 41, 0.15);
+}
+
+.cancelButton:hover:not(:disabled) {
+  background: #eaf5ef;
+  border-color: rgba(
+    20,
+    140,
+    84,
+    0.24
+  );
+}
+
+.cancelButton:focus-visible,
+.confirmButton:focus-visible {
+  outline: 3px solid
+    rgba(20, 140, 84, 0.22);
+  outline-offset: 2px;
+}
+
+.confirmButton {
+  color: #ffffff;
+  background: #c8523a;
+  border: 1px solid #c8523a;
+}
+
+.confirmButton:hover:not(:disabled) {
+  background: #ae432f;
+  border-color: #ae432f;
+}
+
+.spinner {
+  animation: spinner-rotation
+    800ms linear infinite;
+}
+
+@keyframes backdrop-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0)
+      scale(1);
+  }
+}
+
+@keyframes spinner-rotation {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .backdrop {
+    padding: 16px;
+  }
+
+  .dialog {
+    padding: 23px;
+    border-radius: 21px;
+  }
+
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  .confirmButton {
+    grid-row: 1;
+  }
+
+  .cancelButton {
+    grid-row: 2;
+  }
+}
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .backdrop,
+  .dialog,
+  .spinner {
+    animation: none;
+  }
+}

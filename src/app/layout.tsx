@@ -9,6 +9,8 @@ import {
   Manrope,
 } from "next/font/google";
 
+import { publicAppConfig } from "@/config/public-app";
+
 import "./globals.css";
 
 const manrope = Manrope({
@@ -29,6 +31,10 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    publicAppConfig.url,
+  ),
+
   applicationName: "WattUp",
 
   title: {
@@ -38,6 +44,16 @@ export const metadata: Metadata = {
 
   description:
     "Cas malam, hemat nyata, grid aman.",
+
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    siteName: "WattUp",
+    title: "WattUp",
+    description:
+      "Cas malam, hemat nyata, grid aman.",
+    url: "/about",
+  },
 
   manifest: "/manifest.webmanifest",
 

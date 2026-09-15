@@ -7,9 +7,12 @@ import {
 import { publicAppConfig } from "@/config/public-app";
 
 export const metadata: Metadata = {
-  title: "Penghapusan Data | WattUp",
+  title: "Penghapusan Data",
   description:
     "Ajukan permintaan penghapusan akun dan data WattUp.",
+  alternates: {
+    canonical: "/data-deletion",
+  },
 };
 
 const steps = [

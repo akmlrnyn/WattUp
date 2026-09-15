@@ -9,9 +9,12 @@ import {
 import { publicAppConfig } from "@/config/public-app";
 
 export const metadata: Metadata = {
-  title: "Ketentuan Layanan | WattUp",
+  title: "Ketentuan Layanan",
   description:
     "Ketentuan yang berlaku ketika menggunakan aplikasi WattUp.",
+  alternates: {
+    canonical: "/terms",
+  },
 };
 
 const navigation = [
@@ -29,7 +32,6 @@ const navigation = [
 export default function TermsPage() {
   return (
     <PublicPageShell>
-      
 
       <DocumentLayout navigation={navigation}>
         <LegalSection

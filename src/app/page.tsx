@@ -11,7 +11,7 @@ export default async function HomePage() {
   });
 
   if (session?.user) {
-    redirect("/dashboard");
+    redirect("/auth/continue");
   }
 
   redirect("/sign-in");

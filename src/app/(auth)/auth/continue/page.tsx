@@ -9,6 +9,10 @@ export const dynamic = "force-dynamic";
 export default async function AuthContinuePage() {
   const session = await requireUser();
 
+  if (!session.user.emailVerified) {
+    redirect("/verify-email");
+  }
+
   const userRole = (
     session.user as {
       role?: unknown;

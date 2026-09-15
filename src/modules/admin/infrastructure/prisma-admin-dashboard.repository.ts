@@ -7,9 +7,14 @@ import type {
 
 import { isAdmin } from "@/modules/auth/domain/roles";
 import { prisma } from "@/shared/infrastructure/database/prisma";
+import {
+  formatWibShortDate,
+  getCurrentWibWeekRange,
+  getWibMondayIndex,
+  toWibDayIndex,
+} from "@/shared/domain/wib-date";
 
 const DAY_MS = 24 * 60 * 60 * 1_000;
-const WIB_OFFSET_MS = 7 * 60 * 60 * 1_000;
 const HISTORY_WINDOW_DAYS = 365;
 
 const DAY_LABELS = [
@@ -43,24 +48,6 @@ function roundTo(
       (value + Number.EPSILON) * factor,
     ) / factor
   );
-}
-
-function toWibDayIndex(date: Date): number {
-  return Math.floor(
-    (date.getTime() + WIB_OFFSET_MS) / DAY_MS,
-  );
-}
-
-function getWibMondayIndex(date: Date): number {
-  const wibDayIndex = toWibDayIndex(date);
-
-  const dayOfWeek = new Date(
-    wibDayIndex * DAY_MS,
-  ).getUTCDay();
-
-  const daysSinceMonday = (dayOfWeek + 6) % 7;
-
-  return wibDayIndex - daysSinceMonday;
 }
 
 function calculateStreak(
@@ -102,10 +89,14 @@ export class PrismaAdminDashboardRepository
         HISTORY_WINDOW_DAYS * DAY_MS,
     );
 
+    const currentWeek =
+      getCurrentWibWeekRange(now);
+
     const [
       users,
       sessionAggregates,
-      recentSessions,
+      historySessions,
+      currentWeekSessions,
       firstSession,
     ] = await Promise.all([
       prisma.user.findMany({
@@ -115,21 +106,11 @@ export class PrismaAdminDashboardRepository
           email: true,
           role: true,
 
-          vehicles: {
+          vehicle: {
             select: {
-              name: true,
+              brand: true,
+              model: true,
             },
-
-            orderBy: [
-              {
-                isPrimary: "desc",
-              },
-              {
-                createdAt: "asc",
-              },
-            ],
-
-            take: 1,
           },
         },
 
@@ -140,6 +121,12 @@ export class PrismaAdminDashboardRepository
 
       prisma.chargingSession.groupBy({
         by: ["userId"],
+
+        where: {
+          startedAt: {
+            lte: now,
+          },
+        },
 
         _count: {
           _all: true,
@@ -176,7 +163,34 @@ export class PrismaAdminDashboardRepository
         },
       }),
 
+      prisma.chargingSession.findMany({
+        where: {
+          startedAt: {
+            gte: currentWeek.start,
+            lte: now,
+            lt: currentWeek.endExclusive,
+          },
+        },
+
+        select: {
+          userId: true,
+          startedAt: true,
+          energyKwh: true,
+          discountedEnergyKwh: true,
+        },
+
+        orderBy: {
+          startedAt: "asc",
+        },
+      }),
+
       prisma.chargingSession.findFirst({
+        where: {
+          startedAt: {
+            lte: now,
+          },
+        },
+
         select: {
           startedAt: true,
         },
@@ -209,7 +223,7 @@ export class PrismaAdminDashboardRepository
     const offPeakDatesByUserId =
       new Map<string, Date[]>();
 
-    for (const session of recentSessions) {
+    for (const session of historySessions) {
       if (
         !participantIds.has(session.userId) ||
         toNumber(
@@ -258,9 +272,14 @@ export class PrismaAdminDashboardRepository
           name: user.name,
           email: user.email,
 
-          vehicleName:
-            user.vehicles[0]?.name ??
-            "Belum diatur",
+          vehicleName: user.vehicle
+            ? [
+                user.vehicle.brand,
+                user.vehicle.model,
+              ]
+                .filter(Boolean)
+                .join(" ") || "Belum diatur"
+            : "Belum diatur",
 
           sessionCount:
             aggregate?._count._all ?? 0,
@@ -446,7 +465,7 @@ export class PrismaAdminDashboardRepository
       }),
     );
 
-    for (const session of recentSessions) {
+    for (const session of currentWeekSessions) {
       if (
         !participantIds.has(
           session.userId,
@@ -483,6 +502,9 @@ export class PrismaAdminDashboardRepository
       dailyTotals.map(
         (total, index) => ({
           label: DAY_LABELS[index],
+          dateLabel: formatWibShortDate(
+            currentMondayIndex + index,
+          ),
 
           rate: roundTo(
             total.energyKwh > 0
@@ -490,6 +512,16 @@ export class PrismaAdminDashboardRepository
                   total.energyKwh) *
                 100
               : 0,
+            1,
+          ),
+
+          energyKwh: roundTo(
+            total.energyKwh,
+            1,
+          ),
+
+          shiftedEnergyKwh: roundTo(
+            total.shiftedEnergyKwh,
             1,
           ),
         }),

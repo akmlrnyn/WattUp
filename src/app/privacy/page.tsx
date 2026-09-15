@@ -10,9 +10,12 @@ import {
 import { publicAppConfig } from "@/config/public-app";
 
 export const metadata: Metadata = {
-  title: "Kebijakan Privasi | WattUp",
+  title: "Kebijakan Privasi",
   description:
     "Penjelasan mengenai cara WattUp mengakses, menggunakan, menyimpan, dan melindungi data pengguna.",
+  alternates: {
+    canonical: "/privacy",
+  },
 };
 
 const navigation = [

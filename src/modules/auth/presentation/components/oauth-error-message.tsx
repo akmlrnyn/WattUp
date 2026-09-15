@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 
 const oauthErrorMessages: Record<string, string> = {
   account_not_linked:
-    "Email ini sudah terdaftar menggunakan metode login lain. Masuk dengan password terlebih dahulu, lalu hubungkan akun Google melalui pengaturan akun.",
+    "Email ini sudah terdaftar menggunakan metode login lain dan belum dapat dihubungkan otomatis. Masuk menggunakan email dan password, atau hubungi dukungan WattUp.",
 
   account_already_linked_to_different_user:
     "Akun Google ini sudah terhubung dengan akun WattUp lain.",

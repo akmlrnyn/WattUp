@@ -2,40 +2,30 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 
 import { publicAppConfig } from "@/config/public-app";
+import { BrandWordmark } from "@/shared/presentation/components/brand-mark";
 
 export type DocumentNavigationItem = {
   id: string;
   label: string;
 };
 
-export function WattUpLogo() {
+interface WattUpLogoProps {
+  priority?: boolean;
+}
+
+export function WattUpLogo({
+  priority = false,
+}: WattUpLogoProps) {
   return (
     <Link
       href="/about"
       aria-label="WattUp"
-      className="group inline-flex items-center gap-2.5"
+      className="group inline-flex items-center"
     >
-      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#087A4D] text-white transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          className="h-[19px] w-[19px]"
-          aria-hidden="true"
-        >
-          <path
-            d="M8 3v4m8-4v4M6 7h12v2.5a6 6 0 0 1-6 6v5.5m-3 0h6"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </span>
-
-      <span className="relative pb-1 text-[22px] font-black tracking-[-0.055em] text-[#102D24]">
-        WattUp
-        <span className="absolute inset-x-0 bottom-0 h-[3px] rounded-full bg-[#13C77A]" />
-      </span>
+      <BrandWordmark
+        priority={priority}
+        className="transition-transform duration-300 group-hover:scale-[1.02]"
+      />
     </Link>
   );
 }
@@ -49,7 +39,7 @@ export function PublicPageShell({
     <div className="min-h-screen bg-[#F7FAF8] font-sans text-[#102D24]">
       <header className="sticky top-0 z-50 border-b border-[#102D24]/8 bg-[#F7FAF8]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-[76px] max-w-[1240px] items-center justify-between px-5 sm:px-8">
-          <WattUpLogo />
+          <WattUpLogo priority />
 
           <nav className="hidden items-center gap-8 text-sm font-semibold text-[#52655E] md:flex">
             <Link

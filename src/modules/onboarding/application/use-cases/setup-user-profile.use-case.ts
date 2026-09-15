@@ -23,29 +23,44 @@ export class SetupUserProfileUseCase {
     userId: string,
     input: SetupUserProfileInput,
   ) {
-    const vehicleName =
-      input.vehicleName.trim();
-
     const vehicleBrand =
-      input.vehicleBrand?.trim() ||
-      undefined;
+      input.vehicleBrand.trim();
 
     const vehicleModel =
-      input.vehicleModel?.trim() ||
-      undefined;
+      input.vehicleModel.trim();
 
     const plateNumber =
       input.plateNumber
         ?.trim()
+        .replace(/\s+/g, " ")
         .toUpperCase() ||
       undefined;
 
     if (
-      !vehicleName ||
-      vehicleName.length > 60
+      !vehicleBrand ||
+      vehicleBrand.length > 60
     ) {
       throw new UserSetupValidationError(
-        "Nama kendaraan wajib diisi dan maksimal 60 karakter.",
+        "Merek kendaraan wajib diisi dan maksimal 60 karakter.",
+      );
+    }
+
+    if (
+      !vehicleModel ||
+      vehicleModel.length > 60
+    ) {
+      throw new UserSetupValidationError(
+        "Tipe atau model kendaraan wajib diisi dan maksimal 60 karakter.",
+      );
+    }
+
+    if (
+      plateNumber &&
+      (plateNumber.length < 3 ||
+        plateNumber.length > 20)
+    ) {
+      throw new UserSetupValidationError(
+        "Nomor polisi harus terdiri dari 3–20 karakter.",
       );
     }
 
@@ -80,7 +95,6 @@ export class SetupUserProfileUseCase {
     return this.repository.setup(
       userId,
       {
-        vehicleName,
         vehicleBrand,
         vehicleModel,
 

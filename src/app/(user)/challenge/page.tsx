@@ -9,6 +9,11 @@ import {
 
 import { requireUser } from "@/modules/auth/presentation/server/auth-guard";
 import { dependencies } from "@/server/dependencies";
+import {
+  fromWibDayIndex,
+  getWibMondayIndex,
+  toWibDayIndex,
+} from "@/shared/domain/wib-date";
 
 import {
   ChallengeShareButton,
@@ -16,12 +21,6 @@ import {
 
 export const dynamic =
   "force-dynamic";
-
-const DAY_MS =
-  24 * 60 * 60 * 1_000;
-
-const WIB_OFFSET_MS =
-  7 * 60 * 60 * 1_000;
 
 const WEEK_TARGET = 5;
 
@@ -34,37 +33,6 @@ const DAY_LABELS = [
   "Sab",
   "Min",
 ];
-
-function toWibDayIndex(
-  date: Date,
-): number {
-  return Math.floor(
-    (
-      date.getTime() +
-      WIB_OFFSET_MS
-    ) / DAY_MS,
-  );
-}
-
-function getWeekStartDayIndex(
-  now: Date,
-): number {
-  const localDate = new Date(
-    now.getTime() +
-      WIB_OFFSET_MS,
-  );
-
-  const dayFromMonday =
-    (
-      localDate.getUTCDay() +
-      6
-    ) % 7;
-
-  return (
-    toWibDayIndex(now) -
-    dayFromMonday
-  );
-}
 
 function formatRupiah(
   value: number,
@@ -82,10 +50,8 @@ function formatRupiah(
 function formatDayNumber(
   dayIndex: number,
 ): string {
-  const date = new Date(
-    dayIndex * DAY_MS -
-      WIB_OFFSET_MS,
-  );
+  const date =
+    fromWibDayIndex(dayIndex);
 
   return new Intl.DateTimeFormat(
     "id-ID",
@@ -123,7 +89,7 @@ export default async function ChallengePage() {
     toWibDayIndex(now);
 
   const weekStartIndex =
-    getWeekStartDayIndex(now);
+    getWibMondayIndex(now);
 
   const weekEndIndex =
     weekStartIndex + 6;

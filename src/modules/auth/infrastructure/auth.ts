@@ -6,9 +6,6 @@ import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
 
 import { prisma } from "@/shared/infrastructure/database/prisma";
-
-import { after } from "next/server";
-
 import { sendWattUpVerificationEmail } from "@/shared/infrastructure/email/resend-email";
 
 const betterAuthUrl =
@@ -20,15 +17,27 @@ const googleClientId =
 const googleClientSecret =
   process.env.GOOGLE_CLIENT_SECRET;
 
+const betterAuthSecret =
+  process.env.BETTER_AUTH_SECRET;
+
 if (!betterAuthUrl) {
   throw new Error(
     "BETTER_AUTH_URL is not configured",
   );
 }
 
-if (!googleClientId || !googleClientSecret) {
+if (
+  !googleClientId ||
+  !googleClientSecret
+) {
   throw new Error(
     "Google OAuth credentials are not configured",
+  );
+}
+
+if (!betterAuthSecret) {
+  throw new Error(
+    "BETTER_AUTH_SECRET is not configured",
   );
 }
 
@@ -36,43 +45,46 @@ export const auth = betterAuth({
   appName: "WattUp",
 
   baseURL: betterAuthUrl,
+  secret: betterAuthSecret,
 
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
 
-emailAndPassword: {
-  enabled: true,
-  minPasswordLength: 8,
+  emailAndPassword: {
+    enabled: true,
+    minPasswordLength: 8,
 
-  /*
-   * Untuk sekarang session tetap dibuat agar data vehicle
-   * bisa disimpan. Akses aplikasi dibatasi melalui layout.
-   */
-  requireEmailVerification: false,
-},
-
-emailVerification: {
-  sendOnSignUp: true,
-  autoSignInAfterVerification: true,
-
-  sendVerificationEmail: async ({
-    user,
-    url,
-  }) => {
     /*
-     * Email dikirim setelah response selesai agar signup
-     * tidak menunggu request Resend.
+     * Session signup dipertahankan agar halaman verifikasi
+     * dapat mengetahui alamat email user.
+     *
+     * Onboarding, dashboard, dan API tetap dibatasi
+     * oleh guard aplikasi berdasarkan emailVerified.
      */
-    after(async () => {
+    requireEmailVerification: false,
+  },
+
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+
+    sendVerificationEmail: async ({
+      user,
+      url,
+    }) => {
+      /*
+       * Untuk tahap local testing/pilot, tunggu hasil Resend.
+       * Dengan begitu UI hanya menampilkan sukses jika
+       * Resend benar-benar menerima email tersebut.
+       */
       await sendWattUpVerificationEmail({
         name: user.name,
         email: user.email,
         verificationUrl: url,
       });
-    });
+    },
   },
-},
 
   socialProviders: {
     google: {
@@ -89,31 +101,25 @@ emailVerification: {
   account: {
     accountLinking: {
       /*
-       * Satu user dapat mempunyai credential
-       * dan Google account sekaligus.
+       * Satu user dapat memiliki credential email/password
+       * dan akun Google sekaligus.
        */
       enabled: true,
 
       /*
-       * Hanya Google yang dipercaya untuk
-       * automatic account linking.
-       */
-      trustedProviders: ["google"],
-
-      /*
-       * Jika email Google sama dengan email user lama,
-       * hubungkan ke user tersebut.
+       * Google memberikan status verifikasi email.
+       * Akun lama dengan email yang sama dapat ditautkan.
        */
       disableImplicitLinking: false,
 
       /*
-       * Jangan pernah menghubungkan dua email berbeda.
+       * Jangan hubungkan dua alamat email berbeda.
        */
       allowDifferentEmails: false,
 
       /*
-       * Nama dan foto WattUp tidak ditimpa otomatis
-       * saat Google ditautkan.
+       * Nama dan foto WattUp tidak otomatis ditimpa
+       * ketika akun Google ditautkan.
        */
       updateUserInfoOnLink: false,
     },
