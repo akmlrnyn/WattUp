@@ -1,8 +1,13 @@
 import { redirect } from "next/navigation";
 
+import { Suspense } from "react";
+
+import { OAuthErrorMessage } from "@/modules/auth/presentation/components/oauth-error-message";
+
 import { SignInForm } from "@/modules/auth/presentation/components/sign-in-form";
 import { getCurrentSession } from "@/modules/auth/presentation/server/auth-guard";
 import { BrandWordmark } from "@/shared/presentation/components/brand-mark";
+import { GoogleSignInButton } from "@/modules/auth/presentation/components/google-sign-in-button";
 
 export default async function SignInPage() {
   const session =
@@ -35,6 +40,16 @@ export default async function SignInPage() {
             progres #ShiftMalam kamu.
           </p>
         </header>
+
+        <GoogleSignInButton />
+
+        <div className="auth-divider">
+          <span>atau masuk dengan email</span>
+        </div>
+
+        <Suspense fallback={null}>
+          <OAuthErrorMessage />
+        </Suspense>
 
         <SignInForm />
       </section>
