@@ -7,7 +7,7 @@ import {
 import Link from "next/link";
 
 import { requireUser } from "@/modules/auth/presentation/server/auth-guard";
-import { getGridStatus } from "@/modules/charging/domain/grid-window";
+import { GridStatusBanner } from "@/modules/charging/presentation/components/grid-status-banner";
 import { dependencies } from "@/server/dependencies";
 
 export const dynamic = "force-dynamic";
@@ -20,20 +20,6 @@ function formatRupiah(value: number): string {
   }).format(value);
 }
 
-function getGridStatusClass(
-  window: "off-peak" | "peak" | "regular",
-): string {
-  if (window === "peak") {
-    return "peak";
-  }
-
-  if (window === "regular") {
-    return "regular";
-  }
-
-  return "off-peak";
-}
-
 export default async function DashboardPage() {
   const session = await requireUser();
 
@@ -41,12 +27,6 @@ export default async function DashboardPage() {
     await dependencies.dashboard.getUserDashboard.execute(
       session.user.id,
     );
-
-  const gridStatus = getGridStatus();
-
-  const gridStatusClass = getGridStatusClass(
-    gridStatus.window,
-  );
 
   const stats = [
     {
@@ -84,16 +64,9 @@ export default async function DashboardPage() {
       </header>
 
       <div className="dashboard-top-grid">
-        <section
-          className={`status-banner ${gridStatusClass}`}
-        >
-          <div className="status-dot" />
-
-          <div>
-            <strong>{gridStatus.title}</strong>
-            <span>{gridStatus.subtitle}</span>
-          </div>
-        </section>
+        <GridStatusBanner
+          initialNow={new Date().toISOString()}
+        />
 
         <section className="streak-row">
           <div className="streak-icon">

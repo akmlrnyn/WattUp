@@ -82,6 +82,9 @@ export function SignUpForm() {
         ),
 
         password,
+
+        callbackURL:
+          "/auth/continue",
       });
 
     if (error) {
@@ -94,7 +97,7 @@ export function SignUpForm() {
       return;
     }
 
-    router.replace("/onboarding");
+    router.replace("/verify-email");
     router.refresh();
   }
 

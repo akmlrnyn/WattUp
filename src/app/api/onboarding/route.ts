@@ -32,6 +32,17 @@ function getString(
     : "";
 }
 
+function isUniqueConstraintError(
+  error: unknown,
+): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    error.code === "P2002"
+  );
+}
+
 export async function POST(
   request: Request,
 ) {
@@ -48,6 +59,19 @@ export async function POST(
       },
       {
         status: 401,
+      },
+    );
+  }
+
+  if (!session.user.emailVerified) {
+    return NextResponse.json(
+      {
+        success: false,
+        message:
+          "Verifikasi email sebelum melanjutkan setup.",
+      },
+      {
+        status: 403,
       },
     );
   }
@@ -77,10 +101,6 @@ export async function POST(
         .setupUserProfile.execute(
           session.user.id,
           {
-            vehicleName: getString(
-              body.vehicleName,
-            ),
-
             vehicleBrand: getString(
               body.vehicleBrand,
             ),
@@ -113,6 +133,19 @@ export async function POST(
       data: setup,
     });
   } catch (error) {
+    if (isUniqueConstraintError(error)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Nomor polisi sudah digunakan pada akun lain.",
+        },
+        {
+          status: 409,
+        },
+      );
+    }
+
     if (
       error instanceof
         UserSetupValidationError ||

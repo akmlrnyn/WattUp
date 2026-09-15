@@ -1,7 +1,6 @@
 export interface SetupUserProfileInput {
-  vehicleName: string;
-  vehicleBrand?: string;
-  vehicleModel?: string;
+  vehicleBrand: string;
+  vehicleModel: string;
 
   batteryCapacityKwh?: number;
   plateNumber?: string;
@@ -15,7 +14,7 @@ export interface UserChargingSetup {
   discountPercent: number;
 
   vehicleId?: string;
-  vehicleName?: string;
+  vehicleLabel?: string;
 }
 
 export interface UserSetupRepository {

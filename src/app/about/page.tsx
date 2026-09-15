@@ -5,9 +5,12 @@ import { PublicPageShell } from "@/components/public/public-page-shell";
 import { publicAppConfig } from "@/config/public-app";
 
 export const metadata: Metadata = {
-  title: "Tentang WattUp",
+  title: "Tentang",
   description:
     "WattUp membantu pengguna kendaraan listrik memahami kebiasaan charging, penggunaan energi, dan potensi penghematan.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 const features = [

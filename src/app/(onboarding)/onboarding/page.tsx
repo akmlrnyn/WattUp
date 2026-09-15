@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { requireUser } from "@/modules/auth/presentation/server/auth-guard";
 import { UserSetupForm } from "@/modules/onboarding/presentation/components/user-setup-form";
 import { dependencies } from "@/server/dependencies";
-// import { BrandWordmark } from "@/shared/presentation/components/brand-mark";
+import { BrandWordmark } from "@/shared/presentation/components/brand-mark";
 
 export const dynamic =
   "force-dynamic";
@@ -11,6 +11,10 @@ export const dynamic =
 export default async function OnboardingPage() {
   const session =
     await requireUser();
+
+  if (!session.user.emailVerified) {
+    redirect("/verify-email");
+  }
 
   const setup =
     await dependencies.onboarding
@@ -27,10 +31,10 @@ export default async function OnboardingPage() {
       <section className="onboarding-card">
         <header className="onboarding-heading">
           <div>
-            {/* <BrandWordmark
+            <BrandWordmark
               className="onboarding-logo"
               priority
-            /> */}
+            />
 
             <span>
               Langkah 2 dari 2

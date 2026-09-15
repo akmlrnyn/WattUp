@@ -19,7 +19,7 @@ model User {
   emailVerified    Boolean           @default(false)
   image            String?
   wattUpProfile    WattUpProfile?
-  vehicles         Vehicle[]
+  vehicle          Vehicle?
   chargingSessions ChargingSession[]
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
@@ -116,13 +116,13 @@ model WattUpProfile {
 model Vehicle {
   id String @id @default(cuid())
 
-  userId String
+  userId String @unique
 
   name               String
   brand              String?
   model              String?
   batteryCapacityKwh Decimal? @db.Decimal(8, 2)
-  plateNumber        String?
+  plateNumber        String?  @unique
   isPrimary          Boolean  @default(false)
 
   createdAt DateTime @default(now())
@@ -132,7 +132,6 @@ model Vehicle {
 
   chargingSessions ChargingSession[]
 
-  @@index([userId])
   @@map("vehicles")
 }
 

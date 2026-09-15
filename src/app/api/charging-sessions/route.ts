@@ -16,7 +16,6 @@ interface CreateSessionBody {
   energyKwh?: number;
   tokenAmount?: number;
 
-  ratePerKwh: number;
   notes?: string;
 }
 
@@ -104,11 +103,6 @@ function parseBody(value: unknown): CreateSessionBody {
       "tokenAmount",
     ),
 
-    ratePerKwh: parseNumber(
-      body.ratePerKwh,
-      "ratePerKwh",
-    ),
-
     notes: notes || undefined,
   };
 }
@@ -138,6 +132,47 @@ async function getAuthenticatedUser(
   return session?.user ?? null;
 }
 
+async function getAppAccessError(
+  user: {
+    id: string;
+    emailVerified: boolean;
+  },
+): Promise<NextResponse | null> {
+  if (!user.emailVerified) {
+    return NextResponse.json(
+      {
+        success: false,
+        message:
+          "Verifikasi email sebelum menggunakan WattUp.",
+      },
+      {
+        status: 403,
+      },
+    );
+  }
+
+  const setup =
+    await dependencies.onboarding
+      .getUserChargingSetup.execute(
+        user.id,
+      );
+
+  if (!setup.vehicleId) {
+    return NextResponse.json(
+      {
+        success: false,
+        message:
+          "Selesaikan setup kendaraan sebelum mencatat charging.",
+      },
+      {
+        status: 409,
+      },
+    );
+  }
+
+  return null;
+}
+
 export async function GET(request: Request) {
   const user = await getAuthenticatedUser(request);
 
@@ -151,6 +186,13 @@ export async function GET(request: Request) {
         status: 401,
       },
     );
+  }
+
+  const accessError =
+    await getAppAccessError(user);
+
+  if (accessError) {
+    return accessError;
   }
 
   const url = new URL(request.url);
@@ -193,9 +235,22 @@ export async function POST(request: Request) {
     );
   }
 
+  const accessError =
+    await getAppAccessError(user);
+
+  if (accessError) {
+    return accessError;
+  }
+
   try {
     const rawBody: unknown = await request.json();
     const body = parseBody(rawBody);
+
+    const setup =
+      await dependencies.onboarding
+        .getUserChargingSetup.execute(
+          user.id,
+        );
 
     const session =
       await dependencies.charging.createSession.execute({
@@ -209,7 +264,8 @@ export async function POST(request: Request) {
         energyKwh: body.energyKwh,
         tokenAmount: body.tokenAmount,
 
-        ratePerKwh: body.ratePerKwh,
+        ratePerKwh:
+          setup.electricityRate,
         notes: body.notes,
       });
 

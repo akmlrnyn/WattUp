@@ -70,12 +70,6 @@ export function UserSetupForm() {
           },
 
           body: JSON.stringify({
-            vehicleName: String(
-              formData.get(
-                "vehicleName",
-              ),
-            ),
-
             vehicleBrand: String(
               formData.get(
                 "vehicleBrand",
@@ -163,50 +157,29 @@ export function UserSetupForm() {
       </div>
 
       <div className="onboarding-grid">
-        <label className="onboarding-field onboarding-field-wide">
-          <span>
-            Nama panggilan kendaraan
-          </span>
-
-          <input
-            autoFocus
-            name="vehicleName"
-            placeholder="Contoh: Ioniq Kakak"
-            required
-            maxLength={60}
-          />
-        </label>
-
         <label className="onboarding-field">
           <span>Merek</span>
 
-          <select
+          <input
+            autoFocus
             name="vehicleBrand"
+            list="vehicle-brands"
+            placeholder="Contoh: Hyundai"
             required
-            defaultValue=""
-          >
-            <option
-              disabled
-              value=""
-            >
-              Pilih merek
-            </option>
+            maxLength={60}
+          />
 
-            {VEHICLE_BRANDS.map(
-              (brand) => (
-                <option
-                  key={brand}
-                  value={brand}
-                >
-                  {brand}
-                </option>
-              ),
-            )}
-          </select>
+          <datalist id="vehicle-brands">
+            {VEHICLE_BRANDS.filter(
+              (brand) => brand !== "Lainnya",
+            ).map((brand) => (
+              <option key={brand} value={brand} />
+            ))}
+          </datalist>
         </label>
 
         <label className="onboarding-field">
-          <span>Model</span>
+          <span>Tipe / model</span>
 
           <input
             name="vehicleModel"
@@ -243,7 +216,12 @@ export function UserSetupForm() {
             name="plateNumber"
             placeholder="B 1234 EV"
             maxLength={20}
+            autoCapitalize="characters"
           />
+
+          <small>
+            Opsional. Digunakan sebagai identitas unik kendaraan.
+          </small>
         </label>
       </div>
 

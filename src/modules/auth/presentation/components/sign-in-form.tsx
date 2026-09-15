@@ -76,7 +76,7 @@ export function SignInForm() {
       return;
     }
 
-    router.replace("/dashboard");
+    router.replace("/auth/continue");
     router.refresh();
   }
 

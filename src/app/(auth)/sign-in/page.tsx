@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { Suspense } from "react";
@@ -14,7 +15,7 @@ export default async function SignInPage() {
     await getCurrentSession();
 
   if (session) {
-    redirect("/dashboard");
+    redirect("/auth/continue");
   }
 
   return (
@@ -52,6 +53,23 @@ export default async function SignInPage() {
         </Suspense>
 
         <SignInForm />
+
+        <nav
+          aria-label="Dokumen WattUp"
+          className="auth-legal-links"
+        >
+          <Link href="/privacy">
+            Privasi
+          </Link>
+          <span aria-hidden>·</span>
+          <Link href="/terms">
+            Ketentuan
+          </Link>
+          <span aria-hidden>·</span>
+          <Link href="/data-deletion">
+            Penghapusan data
+          </Link>
+        </nav>
       </section>
     </main>
   );

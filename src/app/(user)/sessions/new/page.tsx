@@ -11,11 +11,17 @@ export const dynamic = "force-dynamic";
 export default async function NewChargingSessionPage() {
   const session = await requireUser();
 
-  const sessions =
-    await dependencies.charging
-      .listRecentSessions.execute(
-        session.user.id,
-      );
+  const [sessions, setup] =
+    await Promise.all([
+      dependencies.charging
+        .listRecentSessions.execute(
+          session.user.id,
+        ),
+      dependencies.onboarding
+        .getUserChargingSetup.execute(
+          session.user.id,
+        ),
+    ]);
 
   const recentSessions:
     RecentChargingSessionItem[] =
@@ -54,6 +60,9 @@ export default async function NewChargingSessionPage() {
 
       <ChargingSessionForm
         recentSessions={recentSessions}
+        electricityRate={
+          setup.electricityRate
+        }
       />
     </div>
   );

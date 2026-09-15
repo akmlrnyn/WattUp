@@ -54,96 +54,37 @@ export class PrismaUserSetupRepository
             },
           );
 
-        const currentVehicle =
-          await transaction.vehicle.findFirst(
-            {
-              where: {
-                userId,
-              },
+        const vehicleLabel = `${input.vehicleBrand} ${input.vehicleModel}`;
 
-              orderBy: [
-                {
-                  isPrimary: "desc",
-                },
-                {
-                  createdAt: "asc",
-                },
-              ],
-            },
-          );
-
-        await transaction.vehicle.updateMany(
-          {
+        const vehicle =
+          await transaction.vehicle.upsert({
             where: {
               userId,
             },
 
-            data: {
-              isPrimary: false,
+            create: {
+              userId,
+              name: vehicleLabel,
+              brand: input.vehicleBrand,
+              model: input.vehicleModel,
+              batteryCapacityKwh:
+                input.batteryCapacityKwh ?? null,
+              plateNumber:
+                input.plateNumber ?? null,
+              isPrimary: true,
             },
-          },
-        );
 
-        const vehicle =
-          currentVehicle
-            ? await transaction.vehicle.update(
-                {
-                  where: {
-                    id: currentVehicle.id,
-                  },
-
-                  data: {
-                    name:
-                      input.vehicleName,
-
-                    brand:
-                      input.vehicleBrand ??
-                      null,
-
-                    model:
-                      input.vehicleModel ??
-                      null,
-
-                    batteryCapacityKwh:
-                      input.batteryCapacityKwh ??
-                      null,
-
-                    plateNumber:
-                      input.plateNumber ??
-                      null,
-
-                    isPrimary: true,
-                  },
-                },
-              )
-            : await transaction.vehicle.create(
-                {
-                  data: {
-                    userId,
-
-                    name:
-                      input.vehicleName,
-
-                    brand:
-                      input.vehicleBrand ??
-                      null,
-
-                    model:
-                      input.vehicleModel ??
-                      null,
-
-                    batteryCapacityKwh:
-                      input.batteryCapacityKwh ??
-                      null,
-
-                    plateNumber:
-                      input.plateNumber ??
-                      null,
-
-                    isPrimary: true,
-                  },
-                },
-              );
+            update: {
+              name: vehicleLabel,
+              brand: input.vehicleBrand,
+              model: input.vehicleModel,
+              batteryCapacityKwh:
+                input.batteryCapacityKwh ?? null,
+              plateNumber:
+                input.plateNumber ?? null,
+              isPrimary: true,
+            },
+          });
 
         return {
           electricityRate: Number(
@@ -155,7 +96,7 @@ export class PrismaUserSetupRepository
           ),
 
           vehicleId: vehicle.id,
-          vehicleName: vehicle.name,
+          vehicleLabel: vehicle.name,
         };
       },
     );
@@ -178,22 +119,11 @@ export class PrismaUserSetupRepository
             },
           },
 
-          vehicles: {
+          vehicle: {
             select: {
               id: true,
               name: true,
             },
-
-            orderBy: [
-              {
-                isPrimary: "desc",
-              },
-              {
-                createdAt: "asc",
-              },
-            ],
-
-            take: 1,
           },
         },
       });
@@ -212,10 +142,10 @@ export class PrismaUserSetupRepository
       ),
 
       vehicleId:
-        user?.vehicles[0]?.id,
+        user?.vehicle?.id,
 
-      vehicleName:
-        user?.vehicles[0]?.name,
+      vehicleLabel:
+        user?.vehicle?.name,
     };
   }
 }

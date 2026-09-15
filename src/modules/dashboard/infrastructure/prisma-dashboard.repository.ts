@@ -5,9 +5,11 @@ import type {
 } from "../domain/repositories/dashboard.repository";
 
 import { prisma } from "@/shared/infrastructure/database/prisma";
+import {
+  getCurrentWibWeekRange,
+  toWibDayIndex,
+} from "@/shared/domain/wib-date";
 
-const DAY_MS = 24 * 60 * 60 * 1_000;
-const WIB_OFFSET_MS = 7 * 60 * 60 * 1_000;
 
 function toNumber(value: unknown): number {
   if (value === null || value === undefined) {
@@ -26,12 +28,6 @@ function roundTo(
   const factor = 10 ** decimalPlaces;
 
   return Math.round((value + Number.EPSILON) * factor) / factor;
-}
-
-function toWibDayIndex(date: Date): number {
-  return Math.floor(
-    (date.getTime() + WIB_OFFSET_MS) / DAY_MS,
-  );
 }
 
 function calculateStreak(
@@ -96,9 +92,8 @@ export class PrismaDashboardRepository
     userId: string,
     now = new Date(),
   ): Promise<UserDashboardData> {
-    const sevenDaysAgo = new Date(
-      now.getTime() - 7 * DAY_MS,
-    );
+    const currentWeek =
+      getCurrentWibWeekRange(now);
 
     const [
       weeklyAggregate,
@@ -111,8 +106,9 @@ export class PrismaDashboardRepository
           userId,
 
           startedAt: {
-            gte: sevenDaysAgo,
+            gte: currentWeek.start,
             lte: now,
+            lt: currentWeek.endExclusive,
           },
         },
 
@@ -125,6 +121,9 @@ export class PrismaDashboardRepository
       prisma.chargingSession.aggregate({
         where: {
           userId,
+          startedAt: {
+            lte: now,
+          },
         },
 
         _sum: {
@@ -140,6 +139,10 @@ export class PrismaDashboardRepository
       prisma.chargingSession.findMany({
         where: {
           userId,
+
+          startedAt: {
+            lte: now,
+          },
 
           discountedEnergyKwh: {
             gt: 0,
@@ -159,6 +162,12 @@ export class PrismaDashboardRepository
 
       prisma.chargingSession.groupBy({
         by: ["userId"],
+
+        where: {
+          startedAt: {
+            lte: now,
+          },
+        },
 
         _sum: {
           discountedEnergyKwh: true,

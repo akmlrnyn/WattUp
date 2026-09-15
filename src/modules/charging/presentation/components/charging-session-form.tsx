@@ -25,7 +25,6 @@ interface CreateSessionResponse {
   message?: string;
 }
 
-const DEFAULT_RATE = 1699;
 const DISCOUNT_PERCENT = 30;
 
 /*
@@ -47,6 +46,7 @@ export interface RecentChargingSessionItem {
 interface ChargingSessionFormProps {
   recentSessions:
     RecentChargingSessionItem[];
+  electricityRate: number;
 }
 
 function gridLoad(hour: number): number {
@@ -260,6 +260,7 @@ function formatHistoryDate(
 
 export function ChargingSessionForm({
   recentSessions,
+  electricityRate,
 }: ChargingSessionFormProps) {
   const router = useRouter();
 
@@ -291,10 +292,7 @@ export function ChargingSessionForm({
     setTokenAmount,
   ] = useState(13592);
 
-  const [
-    ratePerKwh,
-    setRatePerKwh,
-  ] = useState(DEFAULT_RATE);
+  const ratePerKwh = electricityRate;
 
   const [
     feedback,
@@ -311,7 +309,7 @@ export function ChargingSessionForm({
       ) &&
       ratePerKwh > 0
         ? ratePerKwh
-        : DEFAULT_RATE;
+        : electricityRate;
 
     const resolvedEnergy =
       mode === "KWH"
@@ -349,6 +347,7 @@ export function ChargingSessionForm({
     };
   }, [
     energyKwh,
+    electricityRate,
     hour,
     mode,
     ratePerKwh,
@@ -410,7 +409,6 @@ export function ChargingSessionForm({
                   ? tokenAmount
                   : undefined,
 
-              ratePerKwh,
             }),
           },
         );
@@ -701,7 +699,7 @@ export function ChargingSessionForm({
               "electricity-rate"
             }
           >
-            Tarif listrik
+            Tarif listrik tersimpan
             (Rp/kWh)
           </label>
 
@@ -717,17 +715,7 @@ export function ChargingSessionForm({
                 "electricity-rate"
               }
               min="1"
-              onChange={(
-                event,
-              ) =>
-                setRatePerKwh(
-                  Number(
-                    event.target
-                      .value,
-                  ),
-                )
-              }
-              required
+              readOnly
               step="1"
               type="number"
               value={ratePerKwh}
