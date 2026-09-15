@@ -7,6 +7,10 @@ import { admin } from "better-auth/plugins";
 
 import { prisma } from "@/shared/infrastructure/database/prisma";
 
+import { after } from "next/server";
+
+import { sendWattUpVerificationEmail } from "@/shared/infrastructure/email/resend-email";
+
 const betterAuthUrl =
   process.env.BETTER_AUTH_URL;
 
@@ -37,16 +41,38 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
 
-  emailAndPassword: {
-    enabled: true,
-    minPasswordLength: 8,
+emailAndPassword: {
+  enabled: true,
+  minPasswordLength: 8,
 
+  /*
+   * Untuk sekarang session tetap dibuat agar data vehicle
+   * bisa disimpan. Akses aplikasi dibatasi melalui layout.
+   */
+  requireEmailVerification: false,
+},
+
+emailVerification: {
+  sendOnSignUp: true,
+  autoSignInAfterVerification: true,
+
+  sendVerificationEmail: async ({
+    user,
+    url,
+  }) => {
     /*
-     * Aktifkan setelah email provider tersedia:
-     *
-     * requireEmailVerification: true,
+     * Email dikirim setelah response selesai agar signup
+     * tidak menunggu request Resend.
      */
+    after(async () => {
+      await sendWattUpVerificationEmail({
+        name: user.name,
+        email: user.email,
+        verificationUrl: url,
+      });
+    });
   },
+},
 
   socialProviders: {
     google: {

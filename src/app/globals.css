@@ -3951,3 +3951,114 @@ svg {
   font-size: 0.7rem;
   line-height: 1.55;
 }
+
+.verify-email-page {
+  display: grid;
+  min-height: 100dvh;
+  padding: 24px;
+  place-items: center;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(24, 184, 106, 0.12),
+      transparent 35%
+    ),
+    var(--bg);
+}
+
+.verify-email-card {
+  width: min(100%, 430px);
+  padding: 34px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+
+.verify-email-icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 18px;
+  place-items: center;
+  color: var(--brand);
+  background: var(--surface-2);
+  border-radius: 18px;
+}
+
+.verify-email-step {
+  color: var(--brand);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.verify-email-card h1 {
+  margin: 8px 0 12px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.65rem;
+}
+
+.verify-email-card p {
+  margin: 8px 0;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.verify-email-address {
+  display: block;
+  margin: 13px 0;
+  color: var(--brand);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.verify-email-card .primary-button {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.verify-email-card small {
+  display: block;
+  margin-top: 14px;
+  color: var(--text-dim);
+  font-size: 0.66rem;
+  line-height: 1.5;
+}
+
+.verify-email-success,
+.verify-email-error {
+  margin-top: 17px;
+  padding: 11px 13px;
+  border-radius: 11px;
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.verify-email-success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: var(--brand);
+  background: rgba(20, 140, 84, 0.1);
+}
+
+.verify-email-error {
+  color: #a53c28;
+  background: rgba(226, 102, 74, 0.11);
+}
+
+.button-spinner {
+  animation: button-spin 0.8s linear infinite;
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
