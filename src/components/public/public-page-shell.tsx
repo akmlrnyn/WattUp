@@ -72,8 +72,8 @@ export function PublicPageShell({
           </nav>
 
           <Link
-            href="/"
-            className="inline-flex h-11 items-center justify-center rounded-full bg-[#102D24] px-5 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#087A4D] hover:shadow-lg"
+            href="/dashboard"
+            className="inline-flex h-11 items-center justify-center rounded-full bg-[#ffff] px-5 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#087A4D] hover:shadow-lg hover:text-white"
           >
             Buka WattUp
           </Link>

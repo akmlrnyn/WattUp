@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     title: "WattUp",
     description:
       "Cas malam, hemat nyata, grid aman.",
-    url: "/about",
+    url: "/",
   },
 
   manifest: "/manifest.webmanifest",
