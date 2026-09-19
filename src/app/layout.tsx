@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     "Cas malam, hemat nyata, grid aman.",
   
   verification: {
-    google: "eLsegZCIRlOBMQDAKoLUI157ve5hJkeR55cAKNc2kII",
+    google: "8EVv9lawKMub5Xc09sfPnKdhW9Psbr96H1AcdxNIIhA",
   },
 
   openGraph: {
