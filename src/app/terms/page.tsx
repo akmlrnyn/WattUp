@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import {
-  DocumentHero,
   DocumentLayout,
   LegalSection,
   PublicPageShell,
