@@ -33,9 +33,10 @@ export default async function UserLayout({
           session.user.id,
         );
 
-    if (!setup.vehicleId) {
+    if (!setup.hasVehicles) {
       redirect("/onboarding");
     }
+    if (!setup.billingType) redirect("/complete-profile");
   }
 
   return (

@@ -32,9 +32,10 @@ export default async function AuthContinuePage() {
    * Google user baru sudah memiliki User dan Account,
    * tetapi belum memiliki Vehicle.
    */
-  if (!setup.vehicleId) {
+  if (!setup.hasVehicles) {
     redirect("/onboarding");
   }
+  if (!setup.billingType) redirect("/complete-profile");
 
   redirect("/dashboard");
 }

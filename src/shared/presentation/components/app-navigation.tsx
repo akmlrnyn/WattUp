@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  CarFront,
   CircleDot,
   Home,
   ShieldCheck,
@@ -21,6 +22,7 @@ const navigationItems: NavigationItem[] = [
   { href: "/dashboard", label: "Home", icon: Home },
   { href: "/sessions/new", label: "Catat", icon: Zap },
   { href: "/leaderboard", label: "Papan", icon: Trophy },
+  { href: "/vehicles", label: "Kendaraan", icon: CarFront },
   { href: "/challenge", label: "Challenge", icon: CircleDot },
 ];
 

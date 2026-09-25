@@ -156,8 +156,6 @@ export class PrismaDashboardRepository
         orderBy: {
           startedAt: "desc",
         },
-
-        take: 365,
       }),
 
       prisma.chargingSession.groupBy({

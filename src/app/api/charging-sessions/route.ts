@@ -1,20 +1,21 @@
 import { NextResponse } from "next/server";
 
 import { ChargingCalculationError } from "@/modules/charging/domain/errors/charging-calculation.error";
-import type { ChargingInputMode } from "@/modules/charging/domain/services/calculate-charging-session";
-import { auth } from "@/modules/auth/infrastructure/auth";
+import { verifiedApiUser } from "@/shared/infrastructure/http/user-api";
 import { dependencies } from "@/server/dependencies";
 
 export const runtime = "nodejs";
 
 interface CreateSessionBody {
-  inputMode: ChargingInputMode;
+  inputMode: "KWH" | "METER";
+  vehicleId: string;
 
   startedAt: string;
   endedAt: string;
 
   energyKwh?: number;
-  tokenAmount?: number;
+  meterBefore?: number;
+  meterAfter?: number;
 
   notes?: string;
 }
@@ -69,9 +70,9 @@ function parseBody(value: unknown): CreateSessionBody {
 
   if (
     body.inputMode !== "KWH" &&
-    body.inputMode !== "TOKEN"
+    body.inputMode !== "METER"
   ) {
-    badRequest("inputMode harus KWH atau TOKEN.");
+    badRequest("inputMode harus KWH atau METER.");
   }
 
   if (typeof body.startedAt !== "string") {
@@ -82,6 +83,8 @@ function parseBody(value: unknown): CreateSessionBody {
     badRequest("endedAt wajib diisi.");
   }
 
+  if (typeof body.vehicleId !== "string" || !body.vehicleId.trim()) badRequest("Pilih kendaraan.");
+
   const notes =
     typeof body.notes === "string"
       ? body.notes.trim()
@@ -89,6 +92,7 @@ function parseBody(value: unknown): CreateSessionBody {
 
   return {
     inputMode: body.inputMode,
+    vehicleId: body.vehicleId,
 
     startedAt: body.startedAt,
     endedAt: body.endedAt,
@@ -98,10 +102,8 @@ function parseBody(value: unknown): CreateSessionBody {
       "energyKwh",
     ),
 
-    tokenAmount: parseOptionalNumber(
-      body.tokenAmount,
-      "tokenAmount",
-    ),
+    meterBefore: parseOptionalNumber(body.meterBefore, "meterBefore"),
+    meterAfter: parseOptionalNumber(body.meterAfter, "meterAfter"),
 
     notes: notes || undefined,
   };
@@ -120,16 +122,6 @@ function serializeSession(
     endedAt: session.endedAt.toISOString(),
     createdAt: session.createdAt.toISOString(),
   };
-}
-
-async function getAuthenticatedUser(
-  request: Request,
-) {
-  const session = await auth.api.getSession({
-    headers: request.headers,
-  });
-
-  return session?.user ?? null;
 }
 
 async function getAppAccessError(
@@ -157,12 +149,12 @@ async function getAppAccessError(
         user.id,
       );
 
-  if (!setup.vehicleId) {
+  if (!setup.vehicleId || !setup.billingType) {
     return NextResponse.json(
       {
         success: false,
         message:
-          "Selesaikan setup kendaraan sebelum mencatat charging.",
+          "Lengkapi profil listrik dan tambahkan kendaraan aktif sebelum mencatat charging.",
       },
       {
         status: 409,
@@ -174,26 +166,8 @@ async function getAppAccessError(
 }
 
 export async function GET(request: Request) {
-  const user = await getAuthenticatedUser(request);
-
-  if (!user) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Unauthorized.",
-      },
-      {
-        status: 401,
-      },
-    );
-  }
-
-  const accessError =
-    await getAppAccessError(user);
-
-  if (accessError) {
-    return accessError;
-  }
+  const user = await verifiedApiUser(request);
+  if (user instanceof NextResponse) return user;
 
   const url = new URL(request.url);
   const requestedLimit = Number(
@@ -221,36 +195,14 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const user = await getAuthenticatedUser(request);
-
-  if (!user) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Unauthorized.",
-      },
-      {
-        status: 401,
-      },
-    );
-  }
-
-  const accessError =
-    await getAppAccessError(user);
-
-  if (accessError) {
-    return accessError;
-  }
+  const user = await verifiedApiUser(request);
+  if (user instanceof NextResponse) return user;
 
   try {
+    const accessError = await getAppAccessError(user);
+    if (accessError) return accessError;
     const rawBody: unknown = await request.json();
     const body = parseBody(rawBody);
-
-    const setup =
-      await dependencies.onboarding
-        .getUserChargingSetup.execute(
-          user.id,
-        );
 
     const session =
       await dependencies.charging.createSession.execute({
@@ -262,10 +214,9 @@ export async function POST(request: Request) {
         endedAt: new Date(body.endedAt),
 
         energyKwh: body.energyKwh,
-        tokenAmount: body.tokenAmount,
-
-        ratePerKwh:
-          setup.electricityRate,
+        vehicleId: body.vehicleId,
+        meterBefore: body.meterBefore,
+        meterAfter: body.meterAfter,
         notes: body.notes,
       });
 
@@ -303,7 +254,6 @@ export async function POST(request: Request) {
       );
     }
 
-    console.error("CREATE_CHARGING_SESSION_ERROR", error);
 
     return NextResponse.json(
       {
