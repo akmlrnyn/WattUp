@@ -127,9 +127,9 @@ function validateInput(
 
     ensureFiniteNumber(input.energyKwh, "energyKwh");
 
-    if (input.energyKwh <= 0 || input.energyKwh > 500) {
+    if (input.energyKwh < 0.001 || input.energyKwh > 500) {
       throw new ChargingCalculationError(
-        "Energi harus lebih besar dari 0 dan maksimal 500 kWh.",
+        "Energi harus minimal 0,001 dan maksimal 500 kWh.",
       );
     }
   }

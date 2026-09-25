@@ -4186,3 +4186,2495 @@ svg {
     transform: rotate(360deg);
   }
 }
+
+/* =========================================================
+   VEHICLES — MULTI-VEHICLE MANAGEMENT
+   ========================================================= */
+
+.vehicles-page {
+  --vehicle-brand: #087a4d;
+  display: grid;
+  width: min(100%, 1120px);
+  gap: 30px;
+  margin: 0 auto;
+}
+
+.vehicles-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.page-eyebrow,
+.vehicle-dialog-eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--vehicle-brand, #087a4d);
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.vehicles-heading h1 {
+  margin: 0;
+  color: #102d24;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.55rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.vehicles-heading p {
+  max-width: 680px;
+  margin: 7px 0 0;
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+.vehicles-heading-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.vehicle-profile-link,
+.vehicle-add-button,
+.vehicle-history-link,
+.vehicle-action-button,
+.vehicle-primary-button,
+.vehicle-secondary-button,
+.vehicle-danger-button {
+  display: inline-flex;
+  min-height: 43px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 0.73rem;
+  font-weight: 750;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+.vehicle-profile-link,
+.vehicle-secondary-button {
+  color: #102d24;
+  background: #ffffff;
+}
+
+.vehicle-add-button,
+.vehicle-primary-button {
+  color: #ffffff;
+  background: #087a4d;
+  border-color: #087a4d;
+  box-shadow: 0 10px 24px -15px rgba(8, 122, 77, 0.8);
+}
+
+.vehicle-profile-link:hover,
+.vehicle-secondary-button:hover,
+.vehicle-action-button:hover {
+  color: #087a4d;
+  background: #f0f8f4;
+  border-color: rgba(8, 122, 77, 0.28);
+}
+
+.vehicle-add-button:hover,
+.vehicle-primary-button:hover {
+  background: #096a44;
+  border-color: #096a44;
+  transform: translateY(-1px);
+}
+
+.vehicle-section {
+  display: grid;
+  gap: 13px;
+}
+
+.vehicle-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.vehicle-section-heading h2 {
+  margin: 0;
+  color: #102d24;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.vehicle-section-heading p {
+  margin: 4px 0 0;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+}
+
+.vehicle-section-heading > strong {
+  color: var(--text-dim);
+  font-size: 0.68rem;
+  font-weight: 650;
+}
+
+.vehicle-grid,
+.vehicle-primary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.vehicle-primary-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.vehicle-card {
+  display: flex;
+  min-width: 0;
+  min-height: 330px;
+  flex-direction: column;
+  padding: 23px;
+  overflow-wrap: anywhere;
+  background: #ffffff;
+  border: 1px solid rgba(16, 45, 36, 0.11);
+  border-radius: 20px;
+  box-shadow: 0 18px 46px -34px rgba(16, 45, 36, 0.4);
+}
+
+.vehicle-card-primary {
+  min-height: 300px;
+  border-color: rgba(8, 122, 77, 0.34);
+  box-shadow:
+    inset 4px 0 0 #13c77a,
+    0 22px 55px -38px rgba(8, 122, 77, 0.5);
+}
+
+.vehicle-card-archived {
+  min-height: 285px;
+  background: #fafcfb;
+  box-shadow: none;
+}
+
+.vehicle-card-topline,
+.vehicle-card-footer,
+.vehicle-actions {
+  display: flex;
+  align-items: center;
+}
+
+.vehicle-card-topline {
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.vehicle-card-icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #087a4d;
+  background: #eaf8f1;
+  border-radius: 14px;
+}
+
+.vehicle-status {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 9px;
+  color: #536a61;
+  background: #f3f6f4;
+  border-radius: 999px;
+  font-size: 0.63rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.vehicle-status-primary {
+  color: #087a4d;
+  background: #eaf8f1;
+}
+
+.vehicle-status-archived {
+  color: #6b7772;
+}
+
+.vehicle-card-title {
+  margin-top: 18px;
+}
+
+.vehicle-card-title h3 {
+  margin: 0;
+  color: #102d24;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.16rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.vehicle-card-title p {
+  margin: 5px 0 0;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+}
+
+.vehicle-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 20px 0;
+  overflow: hidden;
+  background: rgba(16, 45, 36, 0.08);
+  border: 1px solid rgba(16, 45, 36, 0.08);
+  border-radius: 14px;
+}
+
+.vehicle-summary > div {
+  min-width: 0;
+  padding: 13px;
+  background: #f7faf8;
+}
+
+.vehicle-summary dt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  line-height: 1.35;
+}
+
+.vehicle-summary dd {
+  margin: 7px 0 0;
+  color: #102d24;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.vehicle-card-footer {
+  min-width: 0;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 17px;
+  border-top: 1px solid rgba(16, 45, 36, 0.09);
+}
+
+.vehicle-history-link {
+  min-height: 38px;
+  flex: 0 0 auto;
+  padding: 8px 10px;
+  color: #087a4d;
+  background: transparent;
+  border-color: transparent;
+}
+
+.vehicle-history-link:hover {
+  background: #eaf8f1;
+}
+
+.vehicle-controls {
+  min-width: 0;
+}
+
+.vehicle-actions {
+  min-width: 0;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.vehicle-action-button {
+  min-height: 38px;
+  padding: 8px 10px;
+  color: #43574f;
+  background: #ffffff;
+}
+
+.vehicle-action-button.danger {
+  color: #a14430;
+}
+
+.vehicle-action-button.danger:hover {
+  color: #963722;
+  background: #fff3f0;
+  border-color: rgba(161, 68, 48, 0.25);
+}
+
+.vehicle-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 9px 0 0;
+  font-size: 0.67rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.vehicle-message svg {
+  flex: 0 0 auto;
+}
+
+.vehicle-message.success { color: #087a4d; }
+.vehicle-message.error { color: #a53c28; }
+
+.vehicle-empty-state,
+.catat-no-vehicle {
+  display: grid;
+  min-height: 330px;
+  padding: 42px 24px;
+  place-items: center;
+  align-content: center;
+  text-align: center;
+  background: #ffffff;
+  border: 1px dashed rgba(8, 122, 77, 0.3);
+  border-radius: 22px;
+}
+
+.vehicle-empty-state > span,
+.catat-no-vehicle > span {
+  display: grid;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 16px;
+  place-items: center;
+  color: #087a4d;
+  background: #eaf8f1;
+  border-radius: 18px;
+}
+
+.vehicle-empty-state h2,
+.catat-no-vehicle h2 {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.1rem;
+}
+
+.vehicle-empty-state p,
+.catat-no-vehicle p {
+  max-width: 510px;
+  margin: 8px 0 0;
+  color: var(--text-dim);
+  font-size: 0.76rem;
+  line-height: 1.65;
+}
+
+.catat-no-vehicle .vehicle-add-button {
+  margin-top: 20px;
+}
+
+.vehicle-archive-section {
+  padding: 0;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+.vehicle-archive-section summary {
+  display: flex;
+  min-height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  color: #43574f;
+  cursor: pointer;
+  font-size: 0.73rem;
+  font-weight: 750;
+  list-style: none;
+}
+
+.vehicle-archive-section summary::-webkit-details-marker {
+  display: none;
+}
+
+.vehicle-archive-section summary > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vehicle-archive-section summary h2 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.vehicle-archive-section summary small {
+  display: grid;
+  min-width: 22px;
+  height: 22px;
+  place-items: center;
+  color: #62736c;
+  background: #eff3f1;
+  border-radius: 999px;
+  font-size: 0.62rem;
+}
+
+.vehicle-archive-section summary > svg {
+  transition: transform 160ms ease;
+}
+
+.vehicle-archive-section[open] summary > svg {
+  transform: rotate(180deg);
+}
+
+.vehicle-archive-copy {
+  margin: 0;
+  padding: 0 18px 15px;
+  color: var(--text-dim);
+  font-size: 0.68rem;
+}
+
+.vehicle-archive-grid {
+  padding: 0 18px 18px;
+}
+
+.vehicle-dialog {
+  width: min(calc(100% - 32px), 560px);
+  max-height: min(88dvh, 680px);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  color: #102d24;
+  background: transparent;
+  border: 0;
+}
+
+.vehicle-dialog::backdrop {
+  background: rgba(7, 30, 22, 0.52);
+  backdrop-filter: blur(5px);
+}
+
+.vehicle-dialog-card {
+  padding: 26px;
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 22px;
+  box-shadow: 0 30px 80px -35px rgba(7, 30, 22, 0.8);
+}
+
+.vehicle-dialog-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.vehicle-dialog-heading h2 {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+}
+
+.vehicle-dialog-close {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  padding: 0;
+  place-items: center;
+  color: #536a61;
+  background: #f2f6f4;
+  border: 0;
+  border-radius: 11px;
+}
+
+.vehicle-dialog-form > p,
+.vehicle-archive-confirmation > p {
+  margin: 14px 0 0;
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  line-height: 1.65;
+}
+
+.vehicle-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.vehicle-field {
+  display: grid;
+  gap: 7px;
+  color: #43574f;
+  font-size: 0.68rem;
+  font-weight: 750;
+}
+
+.vehicle-field input {
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 0 13px;
+  background: #f7faf8;
+  border: 1px solid rgba(16, 45, 36, 0.14);
+  border-radius: 12px;
+  outline: 0;
+}
+
+.vehicle-field input:focus {
+  border-color: #087a4d;
+  box-shadow: 0 0 0 3px rgba(8, 122, 77, 0.1);
+}
+
+.vehicle-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.vehicle-dialog-actions button {
+  min-width: 142px;
+}
+
+.vehicle-danger-button {
+  color: #ffffff;
+  background: #a14430;
+  border-color: #a14430;
+}
+
+.vehicle-warning-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin-top: 20px;
+  place-items: center;
+  color: #a14430;
+  background: #fff1ed;
+  border-radius: 14px;
+}
+
+.vehicle-actions button:disabled,
+.vehicle-dialog button:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+/* =========================================================
+   CATAT SESSION — GUIDED ENTRY
+   ========================================================= */
+
+.catat-page {
+  --catat-brand: #087a4d;
+  width: min(100%, 1120px);
+  margin: 0 auto;
+}
+
+.catat-layout {
+  grid-template-columns: minmax(0, 1.42fr) minmax(290px, 0.68fr);
+  gap: 22px;
+}
+
+.catat-card {
+  border-color: rgba(16, 45, 36, 0.11);
+  box-shadow: 0 18px 52px -38px rgba(16, 45, 36, 0.42);
+}
+
+.catat-form {
+  padding: 0 26px 26px;
+  overflow: hidden;
+}
+
+.catat-form-section {
+  padding: 25px 0;
+  border-bottom: 1px solid rgba(16, 45, 36, 0.1);
+}
+
+.catat-step-heading,
+.catat-preview-heading > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+
+.catat-step-heading > span,
+.catat-preview-heading > div > span {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #087a4d;
+  background: #eaf8f1;
+  border-radius: 9px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.67rem;
+  font-weight: 800;
+}
+
+.catat-step-heading h2,
+.catat-preview-heading h2 {
+  margin: 1px 0 0;
+  color: #102d24;
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.catat-step-heading p,
+.catat-preview-heading p {
+  margin: 4px 0 0;
+  color: var(--text-dim);
+  font-size: 0.67rem;
+  line-height: 1.5;
+}
+
+.catat-select-field,
+.catat-field {
+  display: grid;
+  gap: 7px;
+  margin-top: 17px;
+}
+
+.catat-select-field > span,
+.catat-field > span,
+.catat-label-row label {
+  color: #43574f;
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.065em;
+  text-transform: uppercase;
+}
+
+.catat-select-shell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 49px;
+  padding: 0 13px;
+  color: #087a4d;
+  background: #f7faf8;
+  border: 1px solid rgba(16, 45, 36, 0.14);
+  border-radius: 12px;
+}
+
+.catat-select-shell:focus-within {
+  border-color: #087a4d;
+  box-shadow: 0 0 0 3px rgba(8, 122, 77, 0.1);
+}
+
+.catat-select-shell select {
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  color: #102d24;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.catat-billing-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin-top: 17px;
+  padding: 14px;
+  background: #f7faf8;
+  border: 1px solid rgba(8, 122, 77, 0.14);
+  border-radius: 14px;
+}
+
+.catat-billing-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: #087a4d;
+  background: #e3f5ec;
+  border-radius: 12px;
+}
+
+.catat-billing-card strong {
+  display: block;
+  color: #102d24;
+  font-size: 0.77rem;
+}
+
+.catat-billing-card p {
+  margin: 4px 0 0;
+  color: var(--text-dim);
+  font-size: 0.65rem;
+  line-height: 1.45;
+}
+
+.catat-rate {
+  color: #102d24;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.catat-profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 9px 0 0 54px;
+  color: #087a4d;
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+
+.catat-mode-toggle {
+  margin-top: 17px;
+  background: #eef5f1;
+}
+
+.catat-mode-toggle button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.catat-mode-toggle button.active {
+  color: #087a4d;
+}
+
+.catat-input-shell {
+  background: #f7faf8;
+  border-color: rgba(16, 45, 36, 0.14);
+}
+
+.catat-input-shell:focus-within {
+  border-color: #087a4d;
+  box-shadow: 0 0 0 3px rgba(8, 122, 77, 0.1);
+}
+
+.catat-meter-block,
+.catat-time-block {
+  margin-top: 17px;
+}
+
+.catat-meter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.catat-meter-grid .catat-field {
+  margin-top: 0;
+}
+
+.catat-meter-help {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 10px 0 0;
+  color: var(--text-dim);
+  font-size: 0.64rem;
+  line-height: 1.5;
+}
+
+.catat-meter-help svg {
+  flex: 0 0 auto;
+  color: #087a4d;
+}
+
+.catat-field-error {
+  margin: 0;
+  color: #a53c28;
+  font-size: 0.64rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.catat-time-block {
+  padding: 16px;
+  background: #fbfcfb;
+  border: 1px solid rgba(16, 45, 36, 0.1);
+  border-radius: 14px;
+}
+
+.catat-preview {
+  margin: 24px 0 0;
+  padding: 20px;
+  background: #f0f8f4;
+  border: 1px solid rgba(8, 122, 77, 0.14);
+  border-radius: 17px;
+}
+
+.catat-preview-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.catat-zone {
+  flex: 0 0 auto;
+}
+
+.catat-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 17px 0 0;
+  overflow: hidden;
+  background: rgba(8, 122, 77, 0.1);
+  border: 1px solid rgba(8, 122, 77, 0.1);
+  border-radius: 13px;
+}
+
+.catat-summary-grid > div {
+  min-width: 0;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.catat-summary-grid dt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-dim);
+  font-size: 0.61rem;
+}
+
+.catat-summary-grid dd {
+  margin: 5px 0 0;
+  color: #102d24;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.73rem;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.catat-summary-grid dd.positive {
+  color: #087a4d;
+}
+
+.catat-score-summary {
+  margin-top: 16px;
+}
+
+.catat-score-summary > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #43574f;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.catat-score-summary > div:first-child strong {
+  color: #102d24;
+  font-family: var(--font-mono), monospace;
+}
+
+.catat-score-summary small {
+  display: block;
+  margin-top: 8px;
+  color: var(--text-dim);
+  font-size: 0.59rem;
+  line-height: 1.55;
+}
+
+.catat-feedback {
+  align-items: flex-start;
+  margin-top: 16px;
+  padding: 13px;
+}
+
+.catat-feedback > svg {
+  flex: 0 0 auto;
+}
+
+.catat-feedback strong,
+.catat-feedback span {
+  display: block;
+}
+
+.catat-feedback span {
+  margin-top: 3px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.catat-feedback a {
+  display: inline-flex;
+  margin-top: 6px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.catat-submit-wrap {
+  margin-top: 16px;
+}
+
+.catat-submit {
+  min-height: 51px;
+  margin-top: 0;
+  color: #ffffff;
+  background: #087a4d;
+  box-shadow: 0 12px 28px -17px rgba(8, 122, 77, 0.85);
+}
+
+.catat-submit:hover:not(:disabled) {
+  background: #096a44;
+}
+
+.catat-submit:disabled {
+  color: #72817b;
+  background: #dfe8e3;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.catat-submit-reason {
+  margin: 8px 0 0;
+  color: #687a73;
+  font-size: 0.63rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.catat-history-section {
+  position: sticky;
+  top: 98px;
+}
+
+.catat-history-card {
+  padding: 6px 16px;
+}
+
+.catat-history-row {
+  min-width: 0;
+}
+
+.catat-history-row > div {
+  min-width: 0;
+}
+
+.catat-history-row div > span,
+.catat-history-row div > small {
+  display: block;
+  margin-top: 3px;
+  overflow: hidden;
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.catat-history-row div > small {
+  color: #73837d;
+}
+
+.catat-history-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.62);
+  border-radius: 12px;
+  font-size: 0.62rem;
+  line-height: 1.5;
+}
+
+.catat-history-note svg {
+  flex: 0 0 auto;
+  color: #087a4d;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 3px solid rgba(19, 199, 122, 0.38);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1080px) {
+  .vehicle-card-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vehicle-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 980px) {
+  .catat-history-section {
+    position: static;
+  }
+}
+
+@media (max-width: 800px) {
+  .vehicles-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .vehicles-heading-actions {
+    justify-content: flex-start;
+  }
+
+  .vehicle-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .vehicles-page {
+    gap: 24px;
+  }
+
+  .vehicles-heading,
+  .catat-page-heading {
+    display: flex;
+  }
+
+  .catat-page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .catat-page-heading h1 {
+    font-size: 1.5rem;
+  }
+
+  .vehicles-heading-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .vehicle-profile-link,
+  .vehicle-add-button {
+    width: 100%;
+  }
+
+  .vehicle-card {
+    min-height: 0;
+    padding: 19px;
+    border-radius: 18px;
+  }
+
+  .vehicle-card-footer {
+    gap: 8px;
+  }
+
+  .vehicle-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .vehicle-action-button:first-child:nth-last-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  .vehicle-action-button {
+    width: 100%;
+  }
+
+  .vehicle-history-link {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .vehicle-form-grid,
+  .catat-meter-grid,
+  .catat-summary-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vehicle-dialog {
+    width: min(calc(100% - 24px), 560px);
+    max-height: calc(100dvh - 24px);
+  }
+
+  .vehicle-dialog-card {
+    padding: 21px;
+    border-radius: 19px;
+  }
+
+  .vehicle-dialog-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vehicle-dialog-actions button {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .catat-form {
+    padding: 0 17px 20px;
+  }
+
+  .catat-form-section {
+    padding: 21px 0;
+  }
+
+  .catat-billing-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .catat-rate {
+    grid-column: 2;
+    white-space: normal;
+  }
+
+  .catat-profile-link {
+    margin-left: 0;
+  }
+
+  .catat-mode-toggle button {
+    min-height: 48px;
+    flex-direction: column;
+  }
+
+  .catat-preview {
+    padding: 16px;
+  }
+
+  .catat-preview-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .catat-zone {
+    margin-left: 38px;
+  }
+
+  .catat-history-row div > span,
+  .catat-history-row div > small {
+    max-width: 210px;
+  }
+}
+
+@media (max-width: 390px) {
+  .vehicles-heading-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vehicle-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vehicle-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vehicle-action-button:first-child:nth-last-child(3) {
+    grid-column: auto;
+  }
+
+  .vehicle-dialog-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* =========================================================
+   SUPPORTING VEHICLE, HISTORY, AND ELECTRICITY PAGES
+   ========================================================= */
+
+.vehicle-detail-page,
+.charging-history-page,
+.electricity-profile-page {
+  width: min(100%, 1120px);
+  min-width: 0;
+  margin: 0 auto;
+}
+
+.vehicle-detail-page,
+.charging-history-page {
+  display: grid;
+  gap: 24px;
+}
+
+.vehicle-back-link {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 7px;
+  color: #536a61;
+  font-size: 0.72rem;
+  font-weight: 750;
+  transition: color 150ms ease;
+}
+
+.vehicle-back-link:hover {
+  color: #087a4d;
+}
+
+.vehicle-detail-header,
+.charging-history-page-heading,
+.electricity-profile-heading {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.vehicle-detail-identity {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.vehicle-detail-icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #087a4d;
+  background: #eaf8f1;
+  border: 1px solid rgba(8, 122, 77, 0.12);
+  border-radius: 18px;
+}
+
+.vehicle-detail-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 9px;
+}
+
+.vehicle-detail-header h1,
+.charging-history-page-heading h1,
+.electricity-profile-heading h1 {
+  margin: 0;
+  color: #102d24;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.55rem, 3vw, 2rem);
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.vehicle-detail-header p,
+.charging-history-page-heading p,
+.electricity-profile-heading p {
+  max-width: 680px;
+  margin: 7px 0 0;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+.vehicle-detail-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.vehicle-start-button,
+.electricity-profile-heading > a {
+  display: inline-flex;
+  min-height: 43px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 15px;
+  color: #ffffff;
+  background: #087a4d;
+  border: 1px solid #087a4d;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px -15px rgba(8, 122, 77, 0.8);
+  font-size: 0.73rem;
+  font-weight: 750;
+  transition: 150ms ease;
+}
+
+.vehicle-start-button:hover,
+.electricity-profile-heading > a:hover {
+  background: #096a44;
+  transform: translateY(-1px);
+}
+
+.vehicle-archived-banner,
+.electricity-profile-notice {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 15px 17px;
+  color: #4d5e57;
+  background: #f2f5f3;
+  border: 1px solid rgba(16, 45, 36, 0.1);
+  border-radius: 15px;
+}
+
+.vehicle-archived-banner > svg,
+.electricity-profile-notice > svg {
+  flex: 0 0 auto;
+  color: #087a4d;
+}
+
+.vehicle-archived-banner strong {
+  display: block;
+  color: #102d24;
+  font-size: 0.75rem;
+}
+
+.vehicle-archived-banner p,
+.electricity-profile-notice p {
+  margin: 3px 0 0;
+  font-size: 0.7rem;
+  line-height: 1.55;
+}
+
+.vehicle-detail-section {
+  display: grid;
+  gap: 13px;
+}
+
+.vehicle-detail-section-heading,
+.charging-history-panel-heading {
+  display: flex;
+  min-width: 0;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.vehicle-detail-section-heading h2,
+.charging-history-panel-heading h2 {
+  margin: 0;
+  color: #102d24;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.vehicle-detail-section-heading > small {
+  color: var(--text-dim);
+  font-size: 0.65rem;
+  text-align: right;
+}
+
+.vehicle-detail-stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.vehicle-detail-stats article {
+  display: flex;
+  min-width: 0;
+  min-height: 104px;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 45, 36, 0.11);
+  border-radius: 16px;
+  box-shadow: 0 14px 34px -30px rgba(16, 45, 36, 0.5);
+}
+
+.vehicle-detail-stats article > span {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #087a4d;
+  background: #eaf8f1;
+  border-radius: 10px;
+}
+
+.vehicle-detail-stats article > div {
+  min-width: 0;
+}
+
+.vehicle-detail-stats small,
+.vehicle-detail-stats strong {
+  display: block;
+}
+
+.vehicle-detail-stats small {
+  color: var(--text-dim);
+  font-size: 0.6rem;
+  line-height: 1.4;
+}
+
+.vehicle-detail-stats strong {
+  margin-top: 8px;
+  color: #102d24;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.vehicle-history-panel,
+.charging-history-panel,
+.billing-settings-form {
+  min-width: 0;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid rgba(16, 45, 36, 0.11);
+  border-radius: 20px;
+  box-shadow: 0 18px 52px -38px rgba(16, 45, 36, 0.42);
+}
+
+.vehicle-history-heading,
+.charging-history-panel-heading {
+  padding: 20px 22px;
+  border-bottom: 1px solid rgba(16, 45, 36, 0.1);
+}
+
+.vehicle-history-heading p,
+.charging-history-panel-heading p {
+  margin: 4px 0 0;
+  color: var(--text-dim);
+  font-size: 0.66rem;
+  line-height: 1.45;
+}
+
+.vehicle-history-heading > a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  color: #087a4d;
+  font-size: 0.7rem;
+  font-weight: 750;
+}
+
+.charging-history-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.charging-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.7rem;
+}
+
+.charging-history-table th {
+  padding: 11px 14px;
+  color: #71817b;
+  background: #f7faf8;
+  border-bottom: 1px solid rgba(16, 45, 36, 0.1);
+  font-size: 0.59rem;
+  font-weight: 750;
+  letter-spacing: 0.055em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.charging-history-table td {
+  min-width: 110px;
+  padding: 14px;
+  color: #43574f;
+  border-bottom: 1px solid rgba(16, 45, 36, 0.08);
+  vertical-align: middle;
+}
+
+.charging-history-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.charging-history-table td strong,
+.charging-history-table td span {
+  display: block;
+}
+
+.charging-history-table td strong {
+  color: #102d24;
+  font-size: 0.7rem;
+  overflow-wrap: anywhere;
+}
+
+.charging-history-table td > span:not(.charging-history-offpeak) {
+  margin-top: 4px;
+  color: var(--text-dim);
+  font-size: 0.62rem;
+}
+
+.charging-history-number,
+.charging-history-saving {
+  font-family: var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.charging-history-saving {
+  color: #087a4d !important;
+  font-weight: 700;
+}
+
+.charging-history-offpeak {
+  width: fit-content;
+  padding: 5px 8px;
+  color: #087a4d;
+  background: #eaf8f1;
+  border-radius: 999px;
+  font-size: 0.59rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.charging-history-cards {
+  display: none;
+}
+
+.charging-history-empty {
+  display: grid;
+  min-height: 250px;
+  padding: 34px 20px;
+  place-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.charging-history-empty > span,
+.feature-error-state > span {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 13px;
+  place-items: center;
+  color: #087a4d;
+  background: #eaf8f1;
+  border-radius: 16px;
+}
+
+.charging-history-empty strong {
+  color: #102d24;
+  font-size: 0.82rem;
+}
+
+.charging-history-empty p {
+  max-width: 430px;
+  margin: 7px 0 0;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  line-height: 1.55;
+}
+
+.charging-history-page-heading > div,
+.electricity-profile-heading > div {
+  min-width: 0;
+}
+
+.charging-history-filter {
+  display: flex;
+  min-width: 0;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 45, 36, 0.11);
+  border-radius: 16px;
+}
+
+.charging-history-filter form {
+  display: flex;
+  min-width: 0;
+  align-items: flex-end;
+  gap: 9px;
+}
+
+.charging-history-filter label {
+  display: grid;
+  min-width: min(280px, 100%);
+  gap: 7px;
+}
+
+.charging-history-filter label > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #536a61;
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.charging-history-filter select {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  padding: 0 34px 0 11px;
+  color: #102d24;
+  background: #f7faf8;
+  border: 1px solid rgba(16, 45, 36, 0.14);
+  border-radius: 11px;
+  outline: 0;
+  font-size: 0.7rem;
+  font-weight: 650;
+}
+
+.charging-history-filter button,
+.charging-history-filter form > a {
+  display: inline-flex;
+  min-height: 42px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 13px;
+  border-radius: 11px;
+  font-size: 0.67rem;
+  font-weight: 750;
+}
+
+.charging-history-filter button {
+  color: #ffffff;
+  background: #087a4d;
+  border: 1px solid #087a4d;
+}
+
+.charging-history-filter form > a {
+  color: #536a61;
+  border: 1px solid rgba(16, 45, 36, 0.13);
+}
+
+.charging-history-filter > p {
+  max-width: 330px;
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.64rem;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.charging-history-panel-heading > div {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.charging-history-panel-heading > div > span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #087a4d;
+  background: #eaf8f1;
+  border-radius: 11px;
+}
+
+.charging-history-pagination {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(16, 45, 36, 0.1);
+}
+
+.charging-history-pagination a {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 36px;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  color: #087a4d;
+  border: 1px solid rgba(8, 122, 77, 0.17);
+  border-radius: 10px;
+  font-size: 0.65rem;
+  font-weight: 750;
+}
+
+.charging-history-pagination a:last-child {
+  justify-self: end;
+}
+
+.charging-history-pagination strong {
+  color: var(--text-dim);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+}
+
+.catat-history-all-link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+  color: #087a4d;
+  font-size: 0.64rem;
+  font-weight: 750;
+}
+
+.feature-error-state {
+  display: grid;
+  width: min(100%, 700px);
+  min-height: 390px;
+  margin: 0 auto;
+  padding: 38px 24px;
+  place-items: center;
+  align-content: center;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid rgba(16, 45, 36, 0.11);
+  border-radius: 20px;
+}
+
+.feature-error-state h1 {
+  margin: 0;
+  color: #102d24;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.2rem;
+}
+
+.feature-error-state p {
+  max-width: 480px;
+  margin: 9px 0 0;
+  color: var(--text-dim);
+  font-size: 0.74rem;
+  line-height: 1.6;
+}
+
+.feature-error-state > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.feature-error-state button,
+.feature-error-state a {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border-radius: 11px;
+  font-size: 0.7rem;
+  font-weight: 750;
+}
+
+.feature-error-state button {
+  color: #ffffff;
+  background: #087a4d;
+  border: 1px solid #087a4d;
+}
+
+.feature-error-state a {
+  color: #43574f;
+  background: #ffffff;
+  border: 1px solid rgba(16, 45, 36, 0.14);
+}
+
+.ui-skeleton {
+  background: linear-gradient(90deg, #eaf0ed 25%, #f7faf8 45%, #eaf0ed 65%);
+  background-size: 220% 100%;
+  border-radius: 16px;
+  animation: ui-skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.vehicle-loading-back { width: 130px; height: 18px; }
+.vehicle-loading-hero { height: 110px; }
+.vehicle-loading-stat { height: 104px; }
+.vehicle-loading-history { height: 330px; }
+.history-loading-heading { width: min(100%, 560px); height: 82px; }
+.history-loading-filter { height: 78px; }
+.history-loading-table { height: 430px; }
+
+@keyframes ui-skeleton-pulse {
+  to { background-position: -120% 0; }
+}
+
+/* Electricity profile */
+
+.electricity-profile-page {
+  display: grid;
+  gap: 20px;
+}
+
+.electricity-profile-notice {
+  color: #315d4c;
+  background: #effaf4;
+  border-color: rgba(8, 122, 77, 0.15);
+}
+
+.electricity-profile-notice p {
+  margin: 0;
+}
+
+.billing-settings-form {
+  padding: 0 24px 22px;
+}
+
+.billing-settings-section {
+  padding: 25px 0;
+  border-bottom: 1px solid rgba(16, 45, 36, 0.1);
+}
+
+.billing-settings-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+
+.billing-settings-heading > span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #087a4d;
+  background: #eaf8f1;
+  border-radius: 9px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+.billing-settings-heading h2 {
+  margin: 1px 0 0;
+  color: #102d24;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.billing-settings-heading p {
+  margin: 4px 0 0;
+  color: var(--text-dim);
+  font-size: 0.66rem;
+  line-height: 1.45;
+}
+
+.billing-type-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.billing-type-options label {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  cursor: pointer;
+  background: #f7faf8;
+  border: 1px solid rgba(16, 45, 36, 0.13);
+  border-radius: 15px;
+  transition: 150ms ease;
+}
+
+.billing-type-options label:hover,
+.billing-type-options label.selected {
+  background: #effaf4;
+  border-color: rgba(8, 122, 77, 0.36);
+}
+
+.billing-type-options input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.billing-type-options label:focus-within {
+  outline: 3px solid rgba(19, 199, 122, 0.38);
+  outline-offset: 2px;
+}
+
+.billing-type-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: #087a4d;
+  background: #e4f5ec;
+  border-radius: 12px;
+}
+
+.billing-type-options strong,
+.billing-type-options small {
+  display: block;
+}
+
+.billing-type-options strong {
+  color: #102d24;
+  font-size: 0.75rem;
+}
+
+.billing-type-options small {
+  margin-top: 4px;
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  line-height: 1.5;
+}
+
+.billing-type-options label > i {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #98a7a1;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 3px #ffffff;
+}
+
+.billing-type-options label.selected > i {
+  background: #087a4d;
+  border-color: #087a4d;
+}
+
+.billing-rate-field {
+  display: grid;
+  max-width: 560px;
+  gap: 7px;
+  margin-top: 18px;
+}
+
+.billing-rate-field > span {
+  color: #43574f;
+  font-size: 0.64rem;
+  font-weight: 750;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.billing-rate-field > div {
+  display: flex;
+  min-width: 0;
+  height: 49px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 13px;
+  background: #f7faf8;
+  border: 1px solid rgba(16, 45, 36, 0.14);
+  border-radius: 12px;
+}
+
+.billing-rate-field > div:focus-within {
+  border-color: #087a4d;
+  box-shadow: 0 0 0 3px rgba(8, 122, 77, 0.1);
+}
+
+.billing-rate-field > div.invalid {
+  border-color: rgba(165, 60, 40, 0.45);
+}
+
+.billing-rate-field input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.billing-rate-field > div > span {
+  flex: 0 0 auto;
+  color: var(--text-dim);
+  font-size: 0.68rem;
+}
+
+.billing-rate-field > small {
+  color: var(--text-dim);
+  font-size: 0.61rem;
+  line-height: 1.5;
+}
+
+.billing-rate-field > small.billing-field-error {
+  color: #a53c28;
+  font-weight: 650;
+}
+
+.billing-assumption-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 18px 0 0;
+  overflow: hidden;
+  background: rgba(8, 122, 77, 0.11);
+  border: 1px solid rgba(8, 122, 77, 0.11);
+  border-radius: 13px;
+}
+
+.billing-assumption-grid > div {
+  padding: 13px;
+  background: #f7faf8;
+}
+
+.billing-assumption-grid dt {
+  color: var(--text-dim);
+  font-size: 0.61rem;
+}
+
+.billing-assumption-grid dd {
+  margin: 6px 0 0;
+  color: #102d24;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.77rem;
+  font-weight: 700;
+}
+
+.billing-assumption-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 12px;
+  padding: 13px;
+  color: #536a61;
+  background: #fff8e9;
+  border: 1px solid rgba(190, 133, 28, 0.18);
+  border-radius: 12px;
+}
+
+.billing-assumption-note svg {
+  flex: 0 0 auto;
+  color: #9b6c16;
+}
+
+.billing-assumption-note p {
+  margin: 0;
+  font-size: 0.64rem;
+  line-height: 1.55;
+}
+
+.billing-calculation-details {
+  margin: 20px 0 0;
+  overflow: hidden;
+  background: #f7faf8;
+  border: 1px solid rgba(16, 45, 36, 0.1);
+  border-radius: 13px;
+}
+
+.billing-calculation-details summary {
+  padding: 14px 16px;
+  color: #102d24;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 750;
+}
+
+.billing-calculation-details > div {
+  padding: 0 16px 15px;
+  color: #536a61;
+  font-size: 0.66rem;
+  line-height: 1.6;
+}
+
+.billing-calculation-details p {
+  margin: 7px 0 0;
+}
+
+.billing-calculation-details small {
+  display: block;
+  margin-top: 10px;
+  color: #71817b;
+}
+
+.billing-feedback {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 16px;
+  padding: 13px;
+  border-radius: 12px;
+  font-size: 0.67rem;
+}
+
+.billing-feedback.success {
+  color: #087a4d;
+  background: #eaf8f1;
+}
+
+.billing-feedback.error {
+  color: #a53c28;
+  background: #fff1ed;
+}
+
+.billing-feedback svg { flex: 0 0 auto; }
+.billing-feedback strong,
+.billing-feedback span { display: block; }
+.billing-feedback span { margin-top: 3px; line-height: 1.45; }
+
+.billing-save-bar {
+  position: sticky;
+  z-index: 2;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 20px -4px -6px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(16, 45, 36, 0.1);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+}
+
+.billing-save-bar > span {
+  color: #71817b;
+  font-size: 0.64rem;
+  font-weight: 650;
+}
+
+.billing-save-bar > span.unsaved { color: #8b651e; }
+.billing-save-bar > span.saved { color: #087a4d; }
+
+.billing-save-bar button {
+  display: inline-flex;
+  min-width: 185px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 15px;
+  color: #ffffff;
+  background: #087a4d;
+  border: 0;
+  border-radius: 11px;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.billing-save-bar button:disabled {
+  color: #74837d;
+  background: #dfe8e3;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .vehicle-detail-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .charging-history-filter {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .charging-history-filter > p {
+    max-width: none;
+    text-align: left;
+  }
+}
+
+@media (max-width: 860px) {
+  .vehicle-detail-header,
+  .charging-history-page-heading,
+  .electricity-profile-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .vehicle-detail-actions {
+    flex-wrap: wrap;
+  }
+
+  .charging-history-page-heading > a,
+  .electricity-profile-heading > a {
+    width: fit-content;
+  }
+
+  .charging-history-table-wrap {
+    display: none;
+  }
+
+  .charging-history-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .charging-history-card {
+    min-width: 0;
+    padding: 15px;
+    background: #f9fbfa;
+    border: 1px solid rgba(16, 45, 36, 0.1);
+    border-radius: 14px;
+  }
+
+  .charging-history-card-heading {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .charging-history-card-heading > span {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    place-items: center;
+    color: #087a4d;
+    background: #eaf8f1;
+    border-radius: 11px;
+  }
+
+  .charging-history-card-heading > div {
+    min-width: 0;
+  }
+
+  .charging-history-card-heading strong,
+  .charging-history-card-heading small {
+    display: block;
+    overflow-wrap: anywhere;
+  }
+
+  .charging-history-card-heading strong {
+    color: #102d24;
+    font-size: 0.72rem;
+  }
+
+  .charging-history-card-heading small {
+    margin-top: 3px;
+    color: var(--text-dim);
+    font-size: 0.61rem;
+  }
+
+  .charging-history-card-time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 13px;
+    color: #536a61;
+    font-size: 0.62rem;
+  }
+
+  .charging-history-card dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 13px 0 0;
+    overflow: hidden;
+    background: rgba(16, 45, 36, 0.08);
+    border-radius: 11px;
+  }
+
+  .charging-history-card dl > div {
+    min-width: 0;
+    padding: 10px;
+    background: #ffffff;
+  }
+
+  .charging-history-card dt {
+    color: var(--text-dim);
+    font-size: 0.57rem;
+  }
+
+  .charging-history-card dd {
+    margin: 5px 0 0;
+    color: #102d24;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .charging-history-card dd.positive { color: #087a4d; }
+}
+
+@media (max-width: 767px) {
+  .vehicle-detail-page,
+  .charging-history-page {
+    gap: 20px;
+  }
+
+  .vehicle-detail-identity {
+    gap: 12px;
+  }
+
+  .vehicle-detail-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+  }
+
+  .vehicle-detail-header h1,
+  .charging-history-page-heading h1,
+  .electricity-profile-heading h1 {
+    font-size: 1.5rem;
+  }
+
+  .vehicle-detail-actions,
+  .vehicle-detail-actions .vehicle-controls,
+  .vehicle-detail-actions .vehicle-actions {
+    width: 100%;
+  }
+
+  .vehicle-detail-actions {
+    display: grid;
+  }
+
+  .vehicle-start-button {
+    width: 100%;
+  }
+
+  .vehicle-detail-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vehicle-detail-stats article {
+    min-height: 96px;
+    padding: 13px;
+  }
+
+  .vehicle-detail-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .vehicle-detail-section-heading > small {
+    text-align: left;
+  }
+
+  .vehicle-history-heading {
+    padding: 17px;
+  }
+
+  .vehicle-history-heading > a {
+    min-height: 38px;
+  }
+
+  .charging-history-filter form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .charging-history-filter label {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+
+  .charging-history-filter button,
+  .charging-history-filter form > a {
+    width: 100%;
+  }
+
+  .charging-history-filter form > a:only-of-type {
+    grid-column: auto;
+  }
+
+  .charging-history-cards {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 12px;
+  }
+
+  .charging-history-pagination {
+    padding: 13px;
+  }
+
+  .billing-settings-form {
+    padding: 0 17px 17px;
+  }
+
+  .billing-settings-section {
+    padding: 21px 0;
+  }
+
+  .billing-type-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .billing-save-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .billing-save-bar button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 390px) {
+  .vehicle-detail-stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .charging-history-page-heading > a,
+  .electricity-profile-heading > a {
+    width: 100%;
+  }
+
+  .charging-history-filter form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .charging-history-filter label {
+    grid-column: auto;
+  }
+
+  .charging-history-pagination a {
+    padding-inline: 8px;
+    font-size: 0.6rem;
+  }
+
+  .billing-assumption-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .billing-type-options label {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .billing-type-options label > i {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-skeleton {
+    animation: none;
+  }
+}

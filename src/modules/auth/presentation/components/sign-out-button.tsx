@@ -28,9 +28,6 @@ export function SignOutButton({
   const cancelButtonRef =
     useRef<HTMLButtonElement>(null);
 
-  const [isMounted, setIsMounted] =
-    useState(false);
-
   const [isConfirmOpen, setIsConfirmOpen] =
     useState(false);
 
@@ -39,10 +36,6 @@ export function SignOutButton({
 
   const [errorMessage, setErrorMessage] =
     useState<string | null>(null);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!isConfirmOpen) {
@@ -136,7 +129,7 @@ export function SignOutButton({
   }
 
   const confirmationDialog =
-    isMounted && isConfirmOpen
+    isConfirmOpen
       ? createPortal(
           <div
             className={styles.backdrop}

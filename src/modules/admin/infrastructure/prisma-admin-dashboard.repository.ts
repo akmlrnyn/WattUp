@@ -106,10 +106,11 @@ export class PrismaAdminDashboardRepository
           email: true,
           role: true,
 
-          vehicle: {
+          vehicles: {
+            where: { archivedAt: null },
+            orderBy: [{ isPrimary: "desc" }, { createdAt: "asc" }],
             select: {
-              brand: true,
-              model: true,
+              name: true,
             },
           },
         },
@@ -272,14 +273,7 @@ export class PrismaAdminDashboardRepository
           name: user.name,
           email: user.email,
 
-          vehicleName: user.vehicle
-            ? [
-                user.vehicle.brand,
-                user.vehicle.model,
-              ]
-                .filter(Boolean)
-                .join(" ") || "Belum diatur"
-            : "Belum diatur",
+          vehicleName: user.vehicles.map(vehicle => vehicle.name).join(", ") || "Belum diatur",
 
           sessionCount:
             aggregate?._count._all ?? 0,

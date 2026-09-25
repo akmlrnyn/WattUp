@@ -66,18 +66,18 @@ export default function DataDeletionPage() {
         description="Kami membuat proses penghapusan data tetap sederhana, transparan, dan aman dari permintaan pihak yang tidak berwenang."
       />
 
-      <section className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 sm:py-24">
+      <section className="mx-auto w-full max-w-[1100px] min-w-0 px-4 py-10 sm:px-8 sm:py-20 lg:py-24">
         <div className="grid gap-5 md:grid-cols-3">
           {steps.map((step) => (
             <article
               key={step.number}
-              className="rounded-[28px] border border-[#102D24]/10 bg-white p-7 shadow-[0_20px_60px_rgba(16,45,36,0.05)]"
+              className="min-w-0 rounded-3xl border border-[#102D24]/10 bg-white p-5 shadow-[0_20px_60px_rgba(16,45,36,0.05)] sm:p-7"
             >
               <span className="text-xs font-black tracking-[0.16em] text-[#13A868]">
                 {step.number}
               </span>
 
-              <h2 className="mt-10 text-xl font-black tracking-[-0.03em]">
+              <h2 className="mt-6 break-words text-xl font-black tracking-[-0.03em] sm:mt-10">
                 {step.title}
               </h2>
 
@@ -88,13 +88,13 @@ export default function DataDeletionPage() {
           ))}
         </div>
 
-        <div className="mt-12 grid overflow-hidden rounded-[36px] bg-[#102D24] text-white lg:grid-cols-[1fr_0.8fr]">
-          <div className="p-8 sm:p-12">
+        <div className="mt-8 grid min-w-0 overflow-hidden rounded-3xl bg-[#102D24] text-white sm:mt-12 sm:rounded-[36px] lg:grid-cols-[1fr_0.8fr]">
+          <div className="min-w-0 p-6 sm:p-12">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#6EF0AF]">
               Mulai permintaan
             </p>
 
-            <h2 className="mt-4 max-w-xl text-3xl font-black tracking-[-0.045em] sm:text-4xl">
+            <h2 className="mt-4 max-w-xl break-words text-[1.75rem] font-black leading-tight tracking-[-0.045em] sm:text-4xl">
               Gunakan email yang sama dengan akun WattUp.
             </h2>
 
@@ -106,13 +106,13 @@ export default function DataDeletionPage() {
 
             <a
               href={deletionEmailHref}
-              className="mt-8 inline-flex h-13 items-center justify-center rounded-full bg-[#6EF0AF] px-7 text-sm font-black text-[#102D24] transition hover:-translate-y-0.5 hover:bg-white"
+              className="mt-8 inline-flex min-h-13 w-full items-center justify-center rounded-full bg-[#6EF0AF] px-5 py-3 text-center text-sm font-black text-[#102D24] transition hover:-translate-y-0.5 hover:bg-white sm:w-auto sm:px-7"
             >
               Ajukan penghapusan
             </a>
           </div>
 
-          <div className="border-t border-white/10 bg-white/5 p-8 sm:p-12 lg:border-l lg:border-t-0">
+          <div className="min-w-0 border-t border-white/10 bg-white/5 p-6 sm:p-12 lg:border-l lg:border-t-0">
             <p className="text-sm font-bold">
               Data yang akan diproses
             </p>
@@ -125,8 +125,8 @@ export default function DataDeletionPage() {
                 "Statistik dan progress",
                 "Hubungan autentikasi Google",
               ].map((item) => (
-                <li key={item} className="flex items-center gap-3">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#6EF0AF] text-[10px] font-black text-[#102D24]">
+                <li key={item} className="flex min-w-0 items-start gap-3">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#6EF0AF] text-[10px] font-black text-[#102D24]">
                     ✓
                   </span>
                   {item}
@@ -137,7 +137,7 @@ export default function DataDeletionPage() {
         </div>
 
         <div className="mt-8 grid gap-5 lg:grid-cols-2">
-          <div className="rounded-[28px] border border-[#102D24]/10 bg-white p-7 sm:p-8">
+          <div className="min-w-0 rounded-3xl border border-[#102D24]/10 bg-white p-5 sm:rounded-[28px] sm:p-8">
             <h2 className="text-xl font-black tracking-[-0.03em]">
               Bagaimana dengan backup?
             </h2>
@@ -150,7 +150,7 @@ export default function DataDeletionPage() {
             </p>
           </div>
 
-          <div className="rounded-[28px] border border-[#087A4D]/15 bg-[#EAF8F1] p-7 sm:p-8">
+          <div className="min-w-0 rounded-3xl border border-[#087A4D]/15 bg-[#EAF8F1] p-5 sm:rounded-[28px] sm:p-8">
             <h2 className="text-xl font-black tracking-[-0.03em]">
               Cabut akses Google
             </h2>
@@ -165,7 +165,7 @@ export default function DataDeletionPage() {
               href="https://myaccount.google.com/connections"
               target="_blank"
               rel="noreferrer"
-              className="mt-5 inline-flex items-center gap-2 text-sm font-black text-[#087A4D]"
+              className="mt-5 inline-flex max-w-full items-center gap-2 break-words text-sm font-black text-[#087A4D]"
             >
               Buka koneksi akun Google
               <span aria-hidden="true">↗</span>
