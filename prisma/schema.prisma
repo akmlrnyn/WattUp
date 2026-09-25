@@ -19,7 +19,7 @@ model User {
   emailVerified    Boolean           @default(false)
   image            String?
   wattUpProfile    WattUpProfile?
-  vehicle          Vehicle?
+  vehicles         Vehicle[]
   chargingSessions ChargingSession[]
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
@@ -88,6 +88,12 @@ model Verification {
 enum ChargingInputMode {
   KWH
   TOKEN
+  METER
+}
+
+enum ElectricityBillingType {
+  PREPAID
+  POSTPAID
 }
 
 enum ChargingSource {
@@ -99,6 +105,8 @@ model WattUpProfile {
   id String @id @default(cuid())
 
   userId String @unique
+
+  billingType ElectricityBillingType?
 
   timezone        String  @default("Asia/Jakarta")
   electricityRate Decimal @default(1699) @db.Decimal(12, 2)
@@ -116,7 +124,8 @@ model WattUpProfile {
 model Vehicle {
   id String @id @default(cuid())
 
-  userId String @unique
+  userId     String
+  archivedAt DateTime?
 
   name               String
   brand              String?
@@ -132,6 +141,7 @@ model Vehicle {
 
   chargingSessions ChargingSession[]
 
+  @@index([userId, archivedAt])
   @@map("vehicles")
 }
 
@@ -140,6 +150,10 @@ model ChargingSession {
 
   userId    String
   vehicleId String?
+
+  billingType ElectricityBillingType?
+  meterBefore Decimal?                @db.Decimal(14, 3)
+  meterAfter  Decimal?                @db.Decimal(14, 3)
 
   inputMode ChargingInputMode
   source    ChargingSource    @default(MANUAL)
