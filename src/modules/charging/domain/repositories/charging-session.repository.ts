@@ -2,27 +2,13 @@ import type { ChargingInputMode } from "../services/calculate-charging-session";
 
 export interface CreateChargingSessionRecord {
   userId: string;
-
-  inputMode: ChargingInputMode;
-
+  vehicleId: string;
+  inputMode: "KWH" | "METER";
   startedAt: Date;
   endedAt: Date;
-
-  durationMinutes: number;
-
-  energyKwh: number;
-  tokenAmount?: number;
-  discountedEnergyKwh: number;
-
-  ratePerKwh: number;
-  discountPercent: number;
-
-  baselineCost: number;
-  actualCost: number;
-  savingsAmount: number;
-
-  shiftScore: number;
-
+  energyKwh?: number;
+  meterBefore?: number;
+  meterAfter?: number;
   notes?: string;
 }
 
@@ -30,7 +16,10 @@ export interface ChargingSessionRecord {
   id: string;
   userId: string;
 
-  inputMode: ChargingInputMode;
+  vehicleId: string | null;
+  vehicleLabel: string | null;
+  billingType: "PREPAID" | "POSTPAID" | null;
+  inputMode: ChargingInputMode | "METER";
 
   startedAt: Date;
   endedAt: Date;
@@ -58,6 +47,8 @@ export interface ChargingSessionRepository {
   create(
     data: CreateChargingSessionRecord,
   ): Promise<ChargingSessionRecord>;
+
+  findCurrentWeekByUserId(userId: string): Promise<ChargingSessionRecord[]>;
 
   findRecentByUserId(
     userId: string,

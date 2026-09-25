@@ -22,8 +22,8 @@ export default async function OnboardingPage() {
         session.user.id,
       );
 
-  if (setup.vehicleId) {
-    redirect("/dashboard");
+  if (setup.hasVehicles) {
+    redirect(setup.billingType ? "/dashboard" : "/complete-profile");
   }
 
   return (

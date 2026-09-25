@@ -76,10 +76,9 @@ export default async function ChallengePage() {
       ),
 
     dependencies.charging
-      .listRecentSessions
+      .listCurrentWeekSessions
       .execute(
         session.user.id,
-        50,
       ),
   ]);
 

@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { CarFront, Plus } from "lucide-react";
 import { requireUser } from "@/modules/auth/presentation/server/auth-guard";
 import { dependencies } from "@/server/dependencies";
 
@@ -8,8 +11,13 @@ import {
 
 export const dynamic = "force-dynamic";
 
-export default async function NewChargingSessionPage() {
+export default async function NewChargingSessionPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ vehicle?: string }>;
+}) {
   const session = await requireUser();
+  const query = await searchParams;
 
   const [sessions, setup] =
     await Promise.all([
@@ -23,11 +31,15 @@ export default async function NewChargingSessionPage() {
         ),
     ]);
 
+  if (!setup.billingType) redirect("/complete-profile");
+
   const recentSessions:
     RecentChargingSessionItem[] =
     sessions.slice(0, 6).map(
       (item) => ({
         id: item.id,
+        vehicleId: item.vehicleId,
+        vehicleLabel: item.vehicleLabel,
 
         startedAt:
           item.startedAt.toISOString(),
@@ -58,12 +70,28 @@ export default async function NewChargingSessionPage() {
         <span>#ShiftMalam</span>
       </header>
 
-      <ChargingSessionForm
-        recentSessions={recentSessions}
-        electricityRate={
-          setup.electricityRate
-        }
-      />
+      {setup.vehicles.length === 0 ? (
+        <section className="catat-no-vehicle">
+          <span><CarFront aria-hidden size={28} /></span>
+          <h2>Tambahkan kendaraan terlebih dahulu</h2>
+          <p>
+            Setiap sesi charging harus terhubung ke kendaraan aktif agar riwayat dan ringkasan energinya akurat.
+          </p>
+          <Link className="vehicle-add-button" href="/vehicles">
+            <Plus aria-hidden size={18} />
+            Buka Kendaraan Saya
+          </Link>
+        </section>
+      ) : (
+        <ChargingSessionForm
+          billingType={setup.billingType}
+          discountPercent={setup.discountPercent}
+          electricityRate={setup.electricityRate}
+          preferredVehicleId={query.vehicle}
+          recentSessions={recentSessions}
+          vehicles={setup.vehicles}
+        />
+      )}
     </div>
   );
 }

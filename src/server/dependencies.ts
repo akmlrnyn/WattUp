@@ -38,6 +38,7 @@ export const dependencies = {
   },
 
   charging: {
+    listCurrentWeekSessions: { execute: (userId: string) => chargingSessionRepository.findCurrentWeekByUserId(userId) },
     createSession: new CreateChargingSessionUseCase(
       chargingSessionRepository,
     ),

@@ -82,18 +82,7 @@ export function UserSetupForm() {
               ),
             ),
 
-            batteryCapacityKwh:
-              Number(
-                formData.get(
-                  "batteryCapacityKwh",
-                ),
-              ),
-
-            plateNumber: String(
-              formData.get(
-                "plateNumber",
-              ),
-            ),
+            billingType: formData.get("billingType"),
 
             electricityRate: Number(
               formData.get(
@@ -189,40 +178,6 @@ export function UserSetupForm() {
           />
         </label>
 
-        <label className="onboarding-field">
-          <span>
-            Kapasitas baterai
-          </span>
-
-          <div className="onboarding-input-unit">
-            <input
-              name="batteryCapacityKwh"
-              type="number"
-              min={5}
-              max={250}
-              step={0.1}
-              placeholder="72.6"
-              required
-            />
-
-            <span>kWh</span>
-          </div>
-        </label>
-
-        <label className="onboarding-field">
-          <span>Nomor polisi</span>
-
-          <input
-            name="plateNumber"
-            placeholder="B 1234 EV"
-            maxLength={20}
-            autoCapitalize="characters"
-          />
-
-          <small>
-            Opsional. Digunakan sebagai identitas unik kendaraan.
-          </small>
-        </label>
       </div>
 
       <div className="onboarding-divider" />
@@ -244,6 +199,15 @@ export function UserSetupForm() {
           </p>
         </div>
       </div>
+
+      <label className="onboarding-field">
+        <span>Jenis pembayaran listrik</span>
+        <select name="billingType" defaultValue="" required>
+          <option value="" disabled>Pilih jenis pembayaran</option>
+          <option value="PREPAID">Token / Prabayar</option>
+          <option value="POSTPAID">Pascabayar</option>
+        </select>
+      </label>
 
       <label className="onboarding-field onboarding-field-wide">
         <span>

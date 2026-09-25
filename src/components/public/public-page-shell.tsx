@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Menu } from "lucide-react";
 
 import { publicAppConfig } from "@/config/public-app";
 
@@ -8,6 +9,13 @@ export type DocumentNavigationItem = {
   id: string;
   label: string;
 };
+
+const publicNavigation = [
+  { href: "/", label: "Tentang" },
+  { href: "/privacy", label: "Privasi" },
+  { href: "/terms", label: "Ketentuan" },
+  { href: "/data-deletion", label: "Penghapusan data" },
+] as const;
 
 export function WattUpLogo() {
   return (
@@ -36,49 +44,54 @@ export function PublicPageShell({
   return (
     <div className="min-h-screen overflow-x-clip bg-[#F7FAF8] font-sans text-[#102D24]">
       <header className="sticky top-0 z-50 border-b border-[#102D24]/10 bg-[#F7FAF8]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 w-full max-w-[1240px] items-center justify-between gap-4 px-4 sm:h-[76px] sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 w-full max-w-[1240px] min-w-0 items-center justify-between gap-3 px-4 sm:h-[76px] sm:gap-4 sm:px-6 lg:px-8">
           <WattUpLogo />
 
           <nav
             aria-label="Navigasi utama"
             className="hidden items-center gap-7 text-sm font-semibold text-[#52655E] lg:flex"
           >
-            <Link
-              href="/"
-              className="transition-colors hover:text-[#087A4D]"
-            >
-              Tentang
-            </Link>
-
-            <Link
-              href="/privacy"
-              className="transition-colors hover:text-[#087A4D]"
-            >
-              Privasi
-            </Link>
-
-            <Link
-              href="/terms"
-              className="transition-colors hover:text-[#087A4D]"
-            >
-              Ketentuan
-            </Link>
-
-            <Link
-              href="/data-deletion"
-              className="transition-colors hover:text-[#087A4D]"
-            >
-              Penghapusan data
-            </Link>
+            {publicNavigation.map((item) => (
+              <Link
+                href={item.href}
+                key={item.href}
+                className="transition-colors hover:text-[#087A4D]"
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
 
-          <Link
-            href="/sign-in"
-            className="inline-flex h-10 shrink-0 items-center justify-center rounded-full bg-[#102D24] px-4 text-xs font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#087A4D] hover:shadow-lg sm:h-11 sm:px-5 sm:text-sm"
-          >
-            <span className="sm:hidden">Masuk</span>
-            <span className="hidden sm:inline text-white">Buka WattUp</span>
-          </Link>
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <details className="group relative lg:hidden">
+              <summary className="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-full border border-[#102D24]/10 bg-white text-[#102D24] transition hover:border-[#087A4D]/30 hover:text-[#087A4D] [&::-webkit-details-marker]:hidden">
+                <Menu aria-hidden size={19} />
+                <span className="sr-only">Buka navigasi</span>
+              </summary>
+              <nav
+                aria-label="Navigasi seluler"
+                className="fixed left-4 right-4 top-[4.5rem] z-50 grid gap-1 rounded-2xl border border-[#102D24]/10 bg-white p-2 text-sm font-semibold text-[#52655E] shadow-[0_22px_60px_rgba(16,45,36,0.18)] sm:absolute sm:left-auto sm:right-0 sm:top-12 sm:w-72"
+              >
+                {publicNavigation.map((item) => (
+                  <Link
+                    className="rounded-xl px-4 py-3 transition-colors hover:bg-[#EAF8F1] hover:text-[#087A4D]"
+                    href={item.href}
+                    key={item.href}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+            </details>
+
+            <Link
+              href="/sign-in"
+              className="inline-flex h-10 shrink-0 items-center justify-center rounded-full bg-[#102D24] px-4 text-xs font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#087A4D] hover:shadow-lg sm:h-11 sm:px-5 sm:text-sm"
+            >
+              <span className="sm:hidden">Masuk</span>
+              <span className="hidden text-white sm:inline">Buka WattUp</span>
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -162,14 +175,14 @@ export function DocumentHero({
 
       <div className="pointer-events-none absolute -left-32 bottom-0 h-56 w-56 rounded-full bg-[#E9F8EF] blur-3xl sm:h-64 sm:w-64" />
 
-      <div className="relative mx-auto w-full max-w-[1240px] px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
+      <div className="relative mx-auto w-full max-w-[1240px] min-w-0 px-4 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
         <div className="max-w-4xl">
           <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-[#087A4D]/15 bg-[#EAF8F1] px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#087A4D] sm:px-4 sm:text-xs sm:tracking-[0.16em]">
             <span className="h-2 w-2 shrink-0 rounded-full bg-[#13C77A]" />
             <span className="truncate">{category}</span>
           </div>
 
-          <h1 className="mt-6 max-w-3xl break-words text-4xl font-black tracking-[-0.045em] text-[#102D24] sm:mt-7 sm:text-6xl sm:tracking-[-0.055em] lg:text-7xl">
+          <h1 className="mt-6 max-w-3xl break-words text-[2.15rem] font-black leading-[1.06] tracking-[-0.045em] text-[#102D24] min-[375px]:text-4xl sm:mt-7 sm:text-6xl sm:tracking-[-0.055em] lg:text-7xl">
             {title}
           </h1>
 
@@ -237,7 +250,7 @@ export function DocumentLayout({
           </div>
         </aside>
 
-        <article className="min-w-0 w-full max-w-full overflow-hidden rounded-3xl border border-[#102D24]/10 bg-white px-4 shadow-[0_20px_60px_rgba(16,45,36,0.06)] sm:rounded-[28px] sm:px-8 lg:px-10 lg:shadow-[0_24px_80px_rgba(16,45,36,0.06)]">
+        <article className="min-w-0 w-full max-w-full overflow-hidden rounded-3xl border border-[#102D24]/10 bg-white px-4 shadow-[0_20px_60px_rgba(16,45,36,0.06)] sm:rounded-[28px] sm:px-8 lg:px-10 lg:shadow-[0_24px_80px_rgba(16,45,36,0.06)] [&_a]:[overflow-wrap:anywhere]">
           {children}
         </article>
       </div>
